@@ -8,15 +8,23 @@ public class Pila {
 	}
 	
 	public void push(Object o) {
-		lista.insertFront(o);
+		this.reverse();
+		this.lista.insertFront(o);
+		this.reverse();
 	}
 	
 	public Object pop() {
-		return lista.extractFront();
+		this.reverse();
+		Object tmp = this.lista.extractFront();
+		this.reverse();
+		return tmp;
 	}
 	
 	public Object top() {
-		return lista.get(0);
+		this.reverse();
+		Object tmp = this.lista.get(0);
+		this.reverse();
+		return tmp;
 	}
 	
 	public void reverse() {
@@ -25,7 +33,7 @@ public class Pila {
 		int index = 0;
 		
 		while(index < size) {
-			tmp.insertFront(this.pop());
+			tmp.insertFront(this.lista.extractFront());
 			index++;
 		}
 		

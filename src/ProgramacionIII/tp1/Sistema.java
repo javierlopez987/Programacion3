@@ -10,7 +10,7 @@ public class Sistema {
 		Pila pila = new Pila();
 		
 		
-		int maxListado = 2000000;
+		int maxListado = 200000;
 		
 		reloj.start();
 		for(int i = 0; i < maxListado; i++) {
@@ -23,9 +23,12 @@ public class Sistema {
 		System.out.println(reloj.stop());
 		
 		reloj.start();
-		pila.reverse();
+		System.out.println(pila.pop());
 		System.out.println(reloj.stop());
+		
+		reloj.start();
 		System.out.println(pila.top());
+		System.out.println(reloj.stop());
 		
 	}
 
