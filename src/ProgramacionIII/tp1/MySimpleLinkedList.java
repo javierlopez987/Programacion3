@@ -1,7 +1,8 @@
 package ProgramacionIII.tp1;
 
-public class MySimpleLinkedList {
-	
+import java.util.Iterator;
+
+public class MySimpleLinkedList implements Iterable<Node>{
 	protected Node first;
 	private int size;
 	
@@ -66,5 +67,11 @@ public class MySimpleLinkedList {
 		} else {
 			return -1;
 		}
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		// TODO Auto-generated method stub
+		return new IteradorSimple(this.first);
 	}
 }
