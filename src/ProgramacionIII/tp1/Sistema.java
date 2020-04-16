@@ -1,13 +1,14 @@
 package ProgramacionIII.tp1;
 import java.util.List;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.ArrayList;
 
 import ProgramacionIII.util.*;
 
 public class Sistema {
-	final static int MAX = 50000;
-	final static int MAXNUM = 10000;
+	final static int MAX = 10;
+	final static int MAXNUM = 10;
 	final static Timer reloj = new Timer();
 
 	public static void main(String[] args) {
@@ -15,21 +16,24 @@ public class Sistema {
 		MySimpleLinkedList lista2 = new MySimpleLinkedList();
 		MySimpleLinkedList lista3 = new MySimpleLinkedList();
 		
-		reloj.start();
-		cargarLista(lista1);
-		cargarLista(lista2);
-		//imprimir(lista1);
-		//imprimir(lista2);
-		System.out.println(reloj.stop());
-		reloj.start();
+		//reloj.start();
+		cargarOrdenado(lista1);
+		cargarOrdenado(lista2);
+		System.out.println("Lista 1");
+		imprimir(lista1);
+		System.out.println("Lista 2");
+		imprimir(lista2);
+		//System.out.println(reloj.stop());
+		//reloj.start();
+		System.out.println("Lista resultado");
 		lista3 = listarContienePrimeraNoSegunda(lista1, lista2);
-		System.out.println(reloj.stop());
-		reloj.start();
+		//System.out.println(reloj.stop());
+		//reloj.start();
 		lista3 = lista3.reverse();
-		System.out.println(reloj.stop());
-		reloj.start();
+		//System.out.println(reloj.stop());
+		//reloj.start();
 		imprimir(lista3);
-		System.out.println(reloj.stop());
+		//System.out.println(reloj.stop());
 		
 	}
 	
@@ -41,10 +45,23 @@ public class Sistema {
 		System.out.println("");
 	}
 	
-	public static void cargarLista(MySimpleLinkedList lista) {
+	public static void cargarAleatorio(MySimpleLinkedList lista) {
+		for(int i = 0; i < Math.random()*MAX; i++) {
+			lista.insertFront((int) (Math.random()*MAXNUM));
+		}
+	}
+	
+	public static void cargarOrdenado(MySimpleLinkedList lista) {
+		cargarAleatorio(lista);
+		ordenarLista(lista);
+	}
+	
+	public static void ordenarLista(MySimpleLinkedList lista) {
 		List<Integer> tmp = new ArrayList<>();
-		for(int i = 0; i < MAX; i++) {
-			tmp.add((int) (Math.random()*MAXNUM));
+		Iterator<Integer> it = lista.iterator();
+		while(it.hasNext()) {
+			it.next();
+			tmp.add(lista.extractFront());
 		}
 		Collections.sort(tmp, Collections.reverseOrder());
 		for (Integer element: tmp) {
