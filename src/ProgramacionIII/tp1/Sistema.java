@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import ProgramacionIII.util.*;
 
 public class Sistema {
-	final static int MAX = 10;
-	final static int MAXNUM = 10;
+	final static int MAXLENGHT = 10000000;
+	final static int MAXNUM = 10000;
 	final static Timer reloj = new Timer();
 
 	public static void main(String[] args) {
@@ -18,12 +18,14 @@ public class Sistema {
 		MySimpleLinkedList lista4 = new MySimpleLinkedList();
 		
 		//reloj.start();
-		cargarAleatorio(lista1);
-		cargarAleatorio(lista2);
-		System.out.println("Lista 1");
-		imprimir(lista1);
-		System.out.println("Lista 2");
-		imprimir(lista2);
+		//cargarAleatorio(lista1);
+		//cargarAleatorio(lista2);
+		cargarOrdenado(lista1);
+		cargarOrdenado(lista2);
+		//System.out.println("Lista 1");
+		//imprimir(lista1);
+		//System.out.println("Lista 2");
+		//imprimir(lista2);
 		//System.out.println(reloj.stop());
 		//reloj.start();
 		System.out.println("Lista resultado");
@@ -33,11 +35,14 @@ public class Sistema {
 		//lista3 = lista3.reverse();
 		//System.out.println(reloj.stop());
 		reloj.start();
-		lista3 = listarComunesDesordenadosIt(lista1, lista2);
+		//lista3 = listarComunesDesordenadosIt(lista1, lista2);
+		System.out.println("lista 3");
+		lista3 = listarComunesPrimeraSegundaFor(lista1, lista2);
 		System.out.println(reloj.stop());
 		imprimir(lista3);
 		reloj.start();
-		lista4 = listarComunesDesordenadosFor(lista1, lista2);
+		System.out.println("lista 4");
+		lista4 = listarComunesPrimeraSegundaIt(lista1, lista2);
 		System.out.println(reloj.stop());
 		imprimir(lista4);
 		
@@ -52,7 +57,7 @@ public class Sistema {
 	}
 	
 	public static void cargarAleatorio(MySimpleLinkedList lista) {
-		for(int i = 0; i < Math.random()*MAX; i++) {
+		for(int i = 0; i < Math.random()*MAXLENGHT; i++) {
 			lista.insertFront((int) (Math.random()*MAXNUM));
 		}
 	}
@@ -101,7 +106,10 @@ public class Sistema {
 					aux2 = it2.next();
 				}
 			} else {
-				it2.next();
+				aux2 = it2.next();
+				while(it2.hasNext() && it2.get().equals(aux2)) {
+					aux2 = it2.next();
+				}
 			}
 		}
 		
@@ -109,6 +117,57 @@ public class Sistema {
 			result.insertFront(it1.next());
 		}
 		
+		return result;
+	}
+	
+	public static MySimpleLinkedList listarComunesPrimeraSegundaIt(MySimpleLinkedList lista1, MySimpleLinkedList lista2) {
+		MySimpleLinkedList result = new MySimpleLinkedList();
+		
+		IteradorSimple it1 = lista1.iterator();
+		IteradorSimple it2 = lista2.iterator();
+		
+		while(it1.hasNext() && it2.hasNext()) {
+			Integer aux1 = it1.get();
+			Integer aux2 = it2.get();
+			
+			if(aux1 < aux2) {
+				aux1 = it1.next();
+				while(it1.hasNext() && it1.get().equals(aux1)) {
+					aux1 = it1.next();
+				}
+			} else if (aux1.equals(aux2)) {
+				aux1 = it1.next();
+				while(it1.hasNext() && it1.get().equals(aux1)) {
+					aux1 = it1.next();
+				}
+				aux2 = it2.next();
+				while(it2.hasNext() && it2.get().equals(aux2)) {
+					aux2 = it2.next();
+				}
+				result.insertFront(aux1);
+			} else {
+				aux2 = it2.next();
+				while(it2.hasNext() && it2.get().equals(aux2)) {
+					aux2 = it2.next();
+				}
+			}
+		}
+		result = result.reverse();
+		return result;
+	}
+	
+	public static MySimpleLinkedList listarComunesPrimeraSegundaFor(MySimpleLinkedList lista1, MySimpleLinkedList lista2) {
+		MySimpleLinkedList result = new MySimpleLinkedList();
+		
+		for (Integer element1: lista1) {
+			for (Integer element2: lista2) {
+				if(element1.equals(element2)) {
+					result.insertFront(element1);
+				}
+			}
+		}
+		
+		result = result.reverse();
 		return result;
 	}
 	
@@ -128,7 +187,7 @@ public class Sistema {
 				}
 			}
 		}
-		
+		ordenarLista(result);
 		return result;
 	}
 	
@@ -142,7 +201,7 @@ public class Sistema {
 				}
 			}
 		}
-		
+		ordenarLista(result);
 		return result;
 	}
 }
