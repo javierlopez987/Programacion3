@@ -7,15 +7,15 @@ public class Pila {
 		lista = new MySimpleLinkedList();
 	}
 	
-	public void push(Object o) {
+	public void push(Integer o) {
 		lista.insertFront(o);
 	}
 	
-	public Object pop() {
+	public Integer pop() {
 		return lista.extractFront();
 	}
 	
-	public Object top() {
+	public Integer top() {
 		return lista.get(0);
 	}
 	

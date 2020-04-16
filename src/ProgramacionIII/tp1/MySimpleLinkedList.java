@@ -1,8 +1,6 @@
 package ProgramacionIII.tp1;
 
-import java.util.Iterator;
-
-public class MySimpleLinkedList implements Iterable<Node>{
+public class MySimpleLinkedList implements Iterable<Integer>{
 	protected Node first;
 	private int size;
 	
@@ -11,14 +9,14 @@ public class MySimpleLinkedList implements Iterable<Node>{
 		this.size = 0;
 	}
 	
-	public void insertFront(Object o) {
+	public void insertFront(Integer o) {
 		Node tmp = new Node(o,null);
 		tmp.setNext(this.first);
 		this.first = tmp;
 		this.size++;
 	}
 	
-	public Object extractFront() {
+	public Integer extractFront() {
 		// TODO
 		Node tmp = this.first;
 		this.first = this.first.getNext();
@@ -36,7 +34,7 @@ public class MySimpleLinkedList implements Iterable<Node>{
 		return this.size;
 	}
 	
-	public Object get(int index) {
+	public Integer get(int index) {
 		// TODO
 		int i = 0;
 		Node tmp = this.first;
@@ -53,7 +51,7 @@ public class MySimpleLinkedList implements Iterable<Node>{
 		}
 	}
 
-	public int indexOf(Object o) {
+	public int indexOf(Integer o) {
 		int index = 0;
 		Node tmp = this.first;
 		
@@ -68,9 +66,18 @@ public class MySimpleLinkedList implements Iterable<Node>{
 			return -1;
 		}
 	}
+	
+	public MySimpleLinkedList reverse() {
+		MySimpleLinkedList tmp = new MySimpleLinkedList();
+		IteradorSimple it = this.iterator();
+		while(it.hasNext()) {
+			tmp.insertFront(it.next());
+		}
+		return tmp;
+	}
 
 	@Override
-	public Iterator<Node> iterator() {
+	public IteradorSimple iterator() {
 		// TODO Auto-generated method stub
 		return new IteradorSimple(this.first);
 	}
