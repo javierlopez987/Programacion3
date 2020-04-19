@@ -7,46 +7,9 @@ import java.util.ArrayList;
 import ProgramacionIII.util.*;
 
 public class Sistema {
-	final static int MAXLENGHT = 10000000;
-	final static int MAXNUM = 10000;
+	final static int MAXLENGHT = 200;
+	final static int MAXNUM = 10;
 	final static Timer reloj = new Timer();
-
-	public static void main(String[] args) {
-		MySimpleLinkedList lista1 = new MySimpleLinkedList();
-		MySimpleLinkedList lista2 = new MySimpleLinkedList();
-		MySimpleLinkedList lista3 = new MySimpleLinkedList();
-		MySimpleLinkedList lista4 = new MySimpleLinkedList();
-		
-		//reloj.start();
-		//cargarAleatorio(lista1);
-		//cargarAleatorio(lista2);
-		cargarOrdenado(lista1);
-		cargarOrdenado(lista2);
-		//System.out.println("Lista 1");
-		//imprimir(lista1);
-		//System.out.println("Lista 2");
-		//imprimir(lista2);
-		//System.out.println(reloj.stop());
-		//reloj.start();
-		System.out.println("Lista resultado");
-		//lista3 = listarContienePrimeraNoSegunda(lista1, lista2);
-		//System.out.println(reloj.stop());
-		//reloj.start();
-		//lista3 = lista3.reverse();
-		//System.out.println(reloj.stop());
-		reloj.start();
-		//lista3 = listarComunesDesordenadosIt(lista1, lista2);
-		System.out.println("lista 3");
-		lista3 = listarComunesPrimeraSegundaFor(lista1, lista2);
-		System.out.println(reloj.stop());
-		imprimir(lista3);
-		reloj.start();
-		System.out.println("lista 4");
-		lista4 = listarComunesPrimeraSegundaIt(lista1, lista2);
-		System.out.println(reloj.stop());
-		imprimir(lista4);
-		
-	}
 	
 	public static void imprimir(MySimpleLinkedList lista) {
 		for(Integer element: lista) {
@@ -203,5 +166,19 @@ public class Sistema {
 		}
 		ordenarLista(result);
 		return result;
+	}
+	
+	public static char[] stringToChar(String cadena) {
+		char[] tmp = cadena.toCharArray();
+		boolean capicua = false;
+		
+		int i = 0;
+		int j = tmp.length;
+		
+		while(i < j) {
+			
+		}
+		
+		return cadena.toCharArray();
 	}
 }

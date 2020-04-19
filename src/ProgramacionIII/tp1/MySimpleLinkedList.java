@@ -2,7 +2,7 @@ package ProgramacionIII.tp1;
 
 public class MySimpleLinkedList implements Iterable<Integer>{
 	protected Node first;
-	private int size;
+	protected int size;
 	
 	public MySimpleLinkedList() {
 		this.first = null;
@@ -80,5 +80,13 @@ public class MySimpleLinkedList implements Iterable<Integer>{
 	public IteradorSimple iterator() {
 		// TODO Auto-generated method stub
 		return new IteradorSimple(this.first);
+	}
+	
+	public String toString() {
+		String result = new String("[");
+		for(Integer element: this) {
+			result += element + ",";
+		}
+		return result + "]";
 	}
 }
