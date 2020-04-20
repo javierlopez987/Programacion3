@@ -3,32 +3,28 @@ package ProgramacionIII.tp1;
 import java.util.Iterator;
 
 public class IteradorObject implements Iterator<Object>{
-	private NodeDouble navegador;
+	private NodeDouble nav;
 	
-	public IteradorObject(NodeDouble first) {
-		this.navegador = first;
+	public IteradorObject(NodeDouble navegador) {
+		this.nav = navegador;
 	}
 	
 	@Override
 	public boolean hasNext() {
-		return this.navegador != null;
+		return this.nav != null;
 	}
 
 	@Override
 	public Object next() {
 		// TODO Auto-generated method stub
-		Object info = this.navegador.getInfo();
-		this.navegador = this.navegador.getNext();
+		Object info = this.nav.getInfo();
+		this.nav = this.nav.getNext();
 		return info;
 	}
 	
-	public boolean hasPrev() {
-		return this.navegador.getNext() != null;
-	}
-	
 	public Object prev() {
-		Object info = this.navegador.getInfo();
-		this.navegador = this.navegador.getPrev();
+		Object info = this.nav.getInfo();
+		this.nav = this.nav.getPrev();
 		return info;
 	}
 	

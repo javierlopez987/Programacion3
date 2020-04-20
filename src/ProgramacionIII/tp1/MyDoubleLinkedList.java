@@ -1,7 +1,5 @@
 package ProgramacionIII.tp1;
 
-import java.util.Iterator;
-
 public class MyDoubleLinkedList implements LinkedList{
 	protected NodeDouble first;
 	protected NodeDouble last;
@@ -114,9 +112,29 @@ public class MyDoubleLinkedList implements LinkedList{
 	}
 
 	@Override
-	public Iterator<Object> iterator() {
+	public IteradorObject iterator() {
 		// TODO Auto-generated method stub
 		return new IteradorObject(this.first);
 	}
 	
+	public IteradorObject iteratorBackward() {
+		// TODO Auto-generated method stub
+		return new IteradorObject(this.last);
+	}
+	
+	public boolean isPalindroma() {
+		boolean palindroma = false;
+		IteradorObject itForward = this.iterator();
+		IteradorObject itBackward = this.iteratorBackward();
+		
+		while(itForward.hasNext() && itBackward.hasNext()) {
+			if(itForward.next().equals(itBackward.prev())) {
+				palindroma = true;
+			} else {
+				return false;
+			}
+		}
+		
+		return palindroma;
+	}
 }
