@@ -2,13 +2,14 @@ package ProgramacionIII.tp1;
 
 import java.util.Iterator;
 
-public class MyDoubleLinkedList implements Iterable<Object>{
+public class MyDoubleLinkedList implements LinkedList{
 	protected NodeDouble first;
 	protected NodeDouble last;
 	protected int size;
 	
 	public MyDoubleLinkedList() {
 		this.first = null;
+		this.last = null;
 		this.size = 0;
 	}
 	
@@ -17,26 +18,56 @@ public class MyDoubleLinkedList implements Iterable<Object>{
 		tmp.setNext(this.first);
 		if(this.first != null) {
 			this.first.setPrev(tmp);
+		} else {
+			this.last = tmp;
 		}
 		this.first = tmp;
 		this.size++;
 	}
 	
 	public void insertBack(Object o) {
-		
+		NodeDouble tmp = new NodeDouble(o, null, null);
+		tmp.setPrev(this.last);
+		if(this.last != null) {
+			this.last.setNext(tmp);
+		} else {
+			this.first = tmp;
+		}
+		this.last = tmp;
+		this.size++;
 	}
 	
 	public Object extractFront() {
 		// TODO
-		NodeDouble tmp = this.first;
-		this.first = this.first.getNext();
-		this.first.setPrev(null);
-		this.size--;
-		return tmp.getInfo();
+		if(!this.isEmpty()) {
+			NodeDouble tmp = this.first;
+			this.first = this.first.getNext();
+			if(this.first != null) {
+				this.first.setPrev(null);
+			} else {
+				this.last = null;
+			}
+			this.size--;
+			return tmp.getInfo();
+		} else {
+			return null;
+		}
 	}
 	
 	public Object extractBack() {
-		return null;
+		if(!this.isEmpty()) {
+			NodeDouble tmp = this.last;
+			this.last = this.last.getPrev();
+			if(this.last != null) {
+				this.last.setNext(null);
+			} else {
+				this.first = null;
+			}
+			this.size--;
+			return tmp.getInfo();
+		} else {
+			return null;
+		}
 	}
 
 	public boolean isEmpty() {
@@ -85,7 +116,7 @@ public class MyDoubleLinkedList implements Iterable<Object>{
 	@Override
 	public Iterator<Object> iterator() {
 		// TODO Auto-generated method stub
-		return null;
+		return new IteradorObject(this.first);
 	}
 	
 }
