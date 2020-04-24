@@ -29,4 +29,30 @@ public class Tree {
 				this.right.add(newValue);
 		}
 	}
+	
+	public boolean hasElem(Integer value) {
+		if(this.value == value) {
+			return true;
+		} else if (this.left.hasElem(value)){
+			return true;
+		} else if (this.right.hasElem(value)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isLeaf() {
+		return this.left == null && this.right == null;
+	}
+	 /* Replantear
+	public int getHeight() {
+		int height = 0;
+		if(isLeaf() ) {
+			return 1;
+		} else {
+			this.left.getHeight();
+		}
+	}
+	*/
 }
