@@ -29,5 +29,4 @@ public class Tree {
 				this.right.add(newValue);
 		}
 	}
-
 }
