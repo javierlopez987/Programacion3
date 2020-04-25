@@ -33,22 +33,6 @@ public class Tree {
 		}
 	}
 	
-	/* 
-	//O(n) - Recorre todos los elementos del arbol
-	
-	public boolean hasElem(Integer value) {
-		if(this.value == value) {
-			return true;
-		} else if (this.left.hasElem(value)){
-			return true;
-		} else if (this.right.hasElem(value)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	 */
-	
 	// MEJORADO - Antes de recorrer el subarbol pregunta si es posible encontrar el valor allí
 	public boolean hasElem(Integer value) {
 		boolean hasElem = false;
@@ -56,13 +40,11 @@ public class Tree {
 		if (value == this.value) {
 			hasElem = true;
 		} else if (value < this.value){
-			if(this.left != null) {
+			if(this.left != null)
 				hasElem = this.left.hasElem(value);
-			}
 		} else if (value > this.value) {
-			if(this.right != null) {
+			if(this.right != null)
 				hasElem = this.right.hasElem(value);
-			}
 		}
 		
 		return hasElem;
@@ -73,19 +55,16 @@ public class Tree {
 		int leftHeight = 0;
 		int rightHeight = 0;
 		
-		if(this.left != null) {
+		if(this.left != null)
 			leftHeight += this.left.getHeight();
-		}
 		
-		if (this.right != null) {
+		if (this.right != null)
 			rightHeight += this.right.getHeight();
-		}
 		
-		if (leftHeight >= rightHeight) {
+		if (leftHeight >= rightHeight)
 			height = leftHeight;
-		} else {
+		else
 			height = rightHeight;
-		}
 		
 		height++;
 		
@@ -98,26 +77,32 @@ public class Tree {
 	
 	public void printPreOrder() {
 		System.out.print(this);
+		
 		if(this.left != null)
-		this.left.printPreOrder();
+			this.left.printPreOrder();
+		
 		if(this.right != null)
-		this.right.printPreOrder();
+			this.right.printPreOrder();
 	}
 	
 	public void printPosOrder() {
 		if(this.left != null)
-		this.left.printPosOrder();
+			this.left.printPosOrder();
+		
 		if(this.right != null)
-		this.right.printPosOrder();
+			this.right.printPosOrder();
+		
 		System.out.print(this);
 	}
 	
 	public void printInOrder() {
 		if(this.left != null)
-		this.left.printInOrder();
+			this.left.printInOrder();
+		
 		System.out.print(this);
+		
 		if(this.right != null)
-		this.right.printInOrder();
+			this.right.printInOrder();
 	}
 	
 	public String toString() {
