@@ -3,46 +3,31 @@ package ProgramacionIII.tp2;
 public class MainTP2 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int[] arr = {200,100,20,12,9,8,7,6};
+		Tree arbol = new Tree(10);
+		arbol.add(15);
+		arbol.add(80);
+		arbol.add(99);
+		arbol.add(20);
+		arbol.add(60);
+		arbol.add(25);
+		arbol.add(18);
+		arbol.add(22);
+		arbol.add(25);
+		arbol.add(45);
 		
-		imprimir(arr);
-		burbujeo(arr);
-		imprimir(arr);
-		
-	}
-	
-	public static void burbujeo(int[] arr) {
-		int i = 0;
-		int pos = 0;
-		int nav = 0;
-		int aux = 0;
-		
-		while(i < arr.length) {
-			pos = 0;
-			
-			while(pos < arr.length - i) {
-				nav = pos + 1;
-				
-				if((nav < arr.length-i) && (arr[pos] > arr[nav])) {
-					aux = arr[pos];
-					arr[pos] = arr[nav];
-					arr[nav] = aux;
-				}
-				pos++;
-			}
-			i++;
-		}
-	}
-
-	public static void imprimir(int[] arr) {
-		int i = 0;
-		
-		while(i < arr.length) {
-			System.out.print(arr[i]);
-			System.out.print(", ");
-			i++;
-		}
+		arbol.printPreOrder();
 		System.out.println();
+		arbol.printInOrder();
+		System.out.println();
+		arbol.printPosOrder();
+		System.out.println();
+		
+		System.out.println(arbol.hasElem(10));
+		System.out.println(arbol.hasElem(45));
+		System.out.println(arbol.hasElem(50));
+		System.out.println(arbol.hasElem(99));
+		System.out.println(arbol.hasElem(9));
+		
+		System.out.println(arbol.getHeight());
 	}
 }
