@@ -20,8 +20,8 @@ public class Tree {
 		this.value = value;
 	}
 
-	/* Se agrega condición: si existe el valor ingresado no hace nada
-	 *
+	/* 
+	 * Se agrega condición: si ya existe el valor ingresado no hace nada
 	 */
 	public void add(int newValue) {
 		if (newValue < this.value) {
@@ -37,7 +37,11 @@ public class Tree {
 		}
 	}
 	
-	// MEJORADO - Antes de recorrer el subarbol pregunta si es posible encontrar el valor allí
+	/*
+	 * Complejidad: O(h) donde h es la altura del arbol
+	 * En el peor de los casos el elemento buscado estará en la rama más baja del arbol,
+	 * el programa deberá pasar al menos una vez por cada rama hasta llegar allí.
+	 */
 	public boolean hasElem(Integer value) {
 		boolean hasElem = false;
 		
@@ -54,6 +58,11 @@ public class Tree {
 		return hasElem;
 	}
 	
+	/* Complejidad: O(2h) donde es la altura del arbol
+	 * Al menos una vez el programa recorrerá la altura del arbol.
+	 * En el peor de los casos deberá llegar hasta el último nivel de cada subarbol (izquierdo y derecho)
+	 * 
+	 */
 	public int getHeight() {
 		int height = 0;
 		int leftHeight = 0;
@@ -75,75 +84,27 @@ public class Tree {
 		return height;
 	}
 	
+	/*
+	 * Complejidad: O(1) operaciones lógicas sobre variables de instacia.
+	 * No dependen del tamaño del arbol.
+	 */
 	private boolean isLeaf() {
 		return this.left == null && this.right == null;
 	}
 	
+	/*
+	 * Complejidad: O(1) operaciones lógicas sobre variables de instacia.
+	 * No dependen del tamaño del arbol.
+	 */
 	private boolean isComplete() {
 		return this.left != null && this.right != null;
 	}
 	
-	private Integer getNMDSI() {
-		Integer NMDSI = null;
-		
-		if(this.left != null) {
-			 NMDSI = this.left.getMaxElem();
-		}
-		
-		return NMDSI;
-	}
-	
-	public boolean delete(Integer value) {
-		boolean deletion = false;
-		
-		if(value < this.value) {
-			if(this.left != null) {
-				if(this.left.getValue() == value) {
-					if(this.left.isLeaf()) {
-						this.left = null;
-						deletion = true;
-					} else if (this.left.isComplete()){
-						Integer NMDSI = this.left.getNMDSI();
-						deletion = this.left.delete(NMDSI);
-						this.left.setValue(NMDSI);
-					} else {
-						if(this.left.left != null) {
-							this.left = this.left.left;
-						} else {
-							this.left = this.left.right;
-						}
-						deletion = true;
-					}
-				} else {
-					deletion = this.left.delete(value);
-				}
-			}
-		} else if (value > this.value) {
-			if(this.right != null) {
-				if(this.right.getValue() == value) {
-					if(this.right.isLeaf()) {
-						this.right = null;
-						deletion = true;
-					} else if(this.right.isComplete()) {
-						Integer NMDSI = this.right.getNMDSI();
-						deletion = this.right.delete(NMDSI);
-						this.right.setValue(NMDSI);
-					} else {
-						if(this.right.left != null) {
-							this.right = this.right.left;
-						} else {
-							this.right = this.right.right;
-						}
-						deletion = true;
-					}
-				} else {
-					deletion = this.right.delete(value);
-				}
-			}
-		}
-		return deletion;
-	}
-	
+	/*
+	 * Complejidad: O(h) donde h es la altura del arbol.
+	 * En el peor de los casos recorrerá hasta el nivel más bajo del arbol,
+	 * el programa deberá pasar al menos una vez por cada nivel hasta llegar allí.
+	 */
 	public Integer getMaxElem() {
 		Integer max = null;
 		
@@ -156,6 +117,81 @@ public class Tree {
 		return max;
 	}
 	
+	/*
+	 * Complejidad: 0(h) donde h es la altura del arbol.
+	 * En el peor de los casos comenzará desde el primer nivel [root],
+	 * y deberá recorrer el subarbol izquierdo hasta el último nivel
+	 */
+	private Integer getNMDSI() {
+		Integer NMDSI = null;
+		
+		if(this.left != null) {
+			 NMDSI = this.left.getMaxElem();
+		}
+		
+		return NMDSI;
+	}
+	
+	/*
+	 * Complejidad: O(2h) donde h es la altura del arbol
+	 * En el peor de los casos recorre dos veces la altura del arbol,
+	 * pasando por cada nivel al menos una vez.
+	 */
+	public boolean delete(Integer value) {
+		boolean deletion = false;
+		
+		if(value < this.value) {
+			if(this.left != null) {
+				if(this.left.getValue() == value) {
+					if(this.left.isLeaf()) {
+						this.left = null;
+						deletion = true;
+					} else if (this.left.isComplete()){
+						Integer NMDSI = this.left.getNMDSI(); // O(h)
+						deletion = this.left.delete(NMDSI); // O(h)
+						this.left.setValue(NMDSI);
+					} else {
+						if(this.left.left != null) {
+							this.left = this.left.left;
+						} else {
+							this.left = this.left.right;
+						}
+						deletion = true;
+					}
+				} else {
+					deletion = this.left.delete(value); // O(h)
+				}
+			}
+		} else if (value > this.value) {
+			if(this.right != null) {
+				if(this.right.getValue() == value) {
+					if(this.right.isLeaf()) {
+						this.right = null;
+						deletion = true;
+					} else if(this.right.isComplete()) {
+						Integer NMDSI = this.right.getNMDSI(); // O(h)
+						deletion = this.right.delete(NMDSI); // O(h)
+						this.right.setValue(NMDSI);
+					} else {
+						if(this.right.left != null) {
+							this.right = this.right.left;
+						} else {
+							this.right = this.right.right;
+						}
+						deletion = true;
+					}
+				} else {
+					deletion = this.right.delete(value); // O(h)
+				}
+			}
+		}
+		return deletion;
+	}
+	
+	/*
+	 * Complejidad: O(n) donde n es cantidad de elementos del arbol.
+	 * En el peor de los casos recorre la totalidad de los elementos del arbol.
+	 */
 	public void printPreOrder() {
 		System.out.print(this);
 		
@@ -166,6 +202,10 @@ public class Tree {
 			this.right.printPreOrder();
 	}
 	
+	/*
+	 * Complejidad: O(n) donde n es cantidad de elementos del arbol.
+	 * En el peor de los casos recorre la totalidad de los elementos del arbol.
+	 */
 	public void printPosOrder() {
 		if(this.left != null)
 			this.left.printPosOrder();
@@ -176,6 +216,10 @@ public class Tree {
 		System.out.print(this);
 	}
 	
+	/*
+	 * Complejidad: O(n) donde n es cantidad de elementos del arbol.
+	 * En el peor de los casos recorre la totalidad de los elementos del arbol.
+	 */
 	public void printInOrder() {
 		if(this.left != null)
 			this.left.printInOrder();
