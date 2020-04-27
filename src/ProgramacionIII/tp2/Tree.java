@@ -15,6 +15,10 @@ public class Tree {
 	public Integer getValue() {
 		return value;
 	}
+	
+	private void setValue(Integer value) {
+		this.value = value;
+	}
 
 	/* Se agrega condición: si existe el valor ingresado no hace nada
 	 *
@@ -71,8 +75,85 @@ public class Tree {
 		return height;
 	}
 	
+	private boolean isLeaf() {
+		return this.left == null && this.right == null;
+	}
+	
+	private boolean isComplete() {
+		return this.left != null && this.right != null;
+	}
+	
+	private Integer getNMDSI() {
+		Integer NMDSI = null;
+		
+		if(this.left != null) {
+			 NMDSI = this.left.getMaxElem();
+		}
+		
+		return NMDSI;
+	}
+	
 	public boolean delete(Integer value) {
-		return false;
+		boolean deletion = false;
+		
+		if(value < this.value) {
+			if(this.left != null) {
+				if(this.left.getValue() == value) {
+					if(this.left.isLeaf()) {
+						this.left = null;
+						deletion = true;
+					} else if (this.left.isComplete()){
+						Integer NMDSI = this.left.getNMDSI();
+						deletion = this.left.delete(NMDSI);
+						this.left.setValue(NMDSI);
+					} else {
+						if(this.left.left != null) {
+							this.left = this.left.left;
+						} else {
+							this.left = this.left.right;
+						}
+						deletion = true;
+					}
+				} else {
+					deletion = this.left.delete(value);
+				}
+			}
+		} else if (value > this.value) {
+			if(this.right != null) {
+				if(this.right.getValue() == value) {
+					if(this.right.isLeaf()) {
+						this.right = null;
+						deletion = true;
+					} else if(this.right.isComplete()) {
+						Integer NMDSI = this.right.getNMDSI();
+						deletion = this.right.delete(NMDSI);
+						this.right.setValue(NMDSI);
+					} else {
+						if(this.right.left != null) {
+							this.right = this.right.left;
+						} else {
+							this.right = this.right.right;
+						}
+						deletion = true;
+					}
+				} else {
+					deletion = this.right.delete(value);
+				}
+			}
+		}
+		return deletion;
+	}
+	
+	public Integer getMaxElem() {
+		Integer max = null;
+		
+		if(this.right != null) {
+			max = this.right.getMaxElem();
+		} else {
+			max = this.value;
+		}
+		
+		return max;
 	}
 	
 	public void printPreOrder() {
