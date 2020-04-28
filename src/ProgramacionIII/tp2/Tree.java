@@ -1,6 +1,5 @@
 package ProgramacionIII.tp2;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -284,6 +283,28 @@ public class Tree {
 		
 		if(this.right != null) {
 			tmp.addAll(this.right.getBranch());
+		}
+		
+		return tmp;
+	}
+	
+	/*
+	 * Complejidad: O(n) donde n es la cantidad de elementos del arbol.
+	 * En el peor de los casos recorre todos los elementos del arbol
+	 * para obtener las hojas.
+	 */
+	public List<Integer> getFrontera() {
+		List<Integer> tmp = new LinkedList<Integer>();
+		
+		if(isLeaf()) {
+			tmp.add(this.getValue());
+		} else {
+			if(this.left != null) {
+				tmp.addAll(this.left.getFrontera());
+			}
+			if(this.right !=null) {
+				tmp.addAll(this.right.getFrontera());
+			}
 		}
 		
 		return tmp;
