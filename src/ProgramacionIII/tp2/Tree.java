@@ -4,15 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Tree {
-
+	private final int ROOTLEVEL = 1;
 	private int value;
 	private Tree left;
 	private Tree right;
+	private int level;
 
 	public Tree(int value) {
 		this.value = value;
 		this.left = null;
 		this.right = null;
+		this.level = ROOTLEVEL;
 	}
 	
 	public Integer getValue() {
@@ -22,19 +24,30 @@ public class Tree {
 	private void setValue(Integer value) {
 		this.value = value;
 	}
+	
+	private void setLevel(int level) {
+		this.level = level;
+	}
 
 	/* 
-	 * Se agrega condición: si ya existe el valor ingresado no hace nada
+	 * Se agrega condición: si ya existe el valor ingresado no hace nada.
+	 * Se agrega indicador de nivel.
 	 */
 	public void add(int newValue) {
+		int level = this.level;
+		
 		if (newValue < this.value) {
-			if (this.left == null)
+			if (this.left == null) {
 				this.left = new Tree(newValue);
+				this.left.setLevel(++level);
+			}
 			else
 				this.left.add(newValue);
 		} else if(newValue > this.value ){
-			if (this.right == null)
+			if (this.right == null) {
 				this.right = new Tree(newValue);
+				this.right.setLevel(++level);
+			}
 			else
 				this.right.add(newValue);
 		}
@@ -159,6 +172,7 @@ public class Tree {
 						} else {
 							this.left = this.left.right;
 						}
+						this.left.level--;
 						deletion = true;
 					}
 				} else {
@@ -181,6 +195,7 @@ public class Tree {
 						} else {
 							this.right = this.right.right;
 						}
+						this.right.level--;
 						deletion = true;
 					}
 				} else {
@@ -304,6 +319,30 @@ public class Tree {
 			}
 			if(this.right !=null) {
 				tmp.addAll(this.right.getFrontera());
+			}
+		}
+		
+		return tmp;
+	}
+	
+	/*
+	 * Complejidad: O(n) donde n es la cantidad de elementos
+	 * en el arbol hasta el nivel indicado inclusive.
+	 * Se controla que no realice operaciones inecesariamente
+	 * buscando más allá del nivel indicado porque no tendría sentido.
+	 */
+	public List<Integer> getElemAtLevel(int level) {
+		List<Integer> tmp = new LinkedList<Integer>();
+		
+		
+		if(this.level == level) {
+			tmp.add(this.getValue());
+		} else if (this.level < level){ //controla la busqueda
+			if(this.left != null) {
+				tmp.addAll(this.left.getElemAtLevel(level));
+			}
+			if(this.right !=null) {
+				tmp.addAll(this.right.getElemAtLevel(level));
 			}
 		}
 		
