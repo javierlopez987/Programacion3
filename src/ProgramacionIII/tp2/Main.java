@@ -39,6 +39,14 @@ public class Main {
 		
 		System.out.println(arbol.getHeight());
 		
+		System.out.println(arbol.getFrontera());
+		
+		System.out.println(arbol.getLongestBranch());
+		
+		System.out.println(arbol.getElemAtLevel(4));
+		
+		System.out.println(arbol.getElemAtLevel(8));
+		
 		arbol.delete(45);
 		
 		arbol.printPreOrder();
@@ -49,5 +57,13 @@ public class Main {
 		System.out.println();
 		System.out.println(arbol.hasElem(45));
 		System.out.println(arbol.getHeight());
+		
+		System.out.println(arbol.getLongestBranch());
+		
+		System.out.println(arbol.getFrontera());
+		
+		System.out.println(arbol.getElemAtLevel(4));
+		
+		System.out.println(arbol.getElemAtLevel(8));
 	}
 }
