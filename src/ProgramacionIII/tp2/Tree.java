@@ -1,5 +1,9 @@
 package ProgramacionIII.tp2;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Tree {
 
 	private int value;
@@ -232,5 +236,56 @@ public class Tree {
 	
 	public String toString() {
 		return "[" + this.value + "]";
+	}
+	
+	/*
+	 * Complejidad O(n) donde n es la cantidad de elementos de un subarbol.
+	 * En el peor de los casos y suponiendo que h es la altura del arbol, 
+	 * recorre dos veces la altura de la rama izquierda (h-1)
+	 * para obtener la altura de esa rama, 
+	 * luego recorre dos veces la altura de la rama derecha (h-1) para obtener su altura 
+	 * -propio de la implementación de getHeight()-
+	 * Luego compara las alturas de ramas, elige la más larga y recorre todos sus elementos (n)
+	 * Por lo tanto en el peor de los casos es O(4(h-1)) + O(n)
+	 */
+	public List<Integer> getLongestBranch() {
+		List<Integer> tmp = new LinkedList<Integer>();
+		int leftHeight = 0;
+		int rightHeight = 0;
+		
+		
+		if(this.left != null) {
+			leftHeight = this.left.getHeight(); // O(h)
+		}
+		if(this.right != null) {
+			rightHeight = this.right.getHeight(); // O(h)
+		}
+		
+		if(leftHeight >= rightHeight) { // O(n) 
+			tmp.addAll(this.left.getBranch()); 
+		} else {
+			tmp.addAll(this.right.getBranch());
+		}
+		
+		return tmp;
+	}
+
+	/*
+	 * Complejidad: O(n) donde n es la cantidad de elementos del subarbol
+	 */
+	private List<Integer> getBranch() {
+		List<Integer> tmp = new LinkedList<Integer>();
+		
+		if(this.left != null) {
+			tmp.addAll(this.left.getBranch());
+		}
+		
+		tmp.add(this.getValue());
+		
+		if(this.right != null) {
+			tmp.addAll(this.right.getBranch());
+		}
+		
+		return tmp;
 	}
 }
