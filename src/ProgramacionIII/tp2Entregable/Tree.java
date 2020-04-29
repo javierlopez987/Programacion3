@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Tree {
-	private final static int ROOTLEVEL = 1;
+	private final static int ROOTLEVEL = 0;
 	private int value;
 	private Tree left;
 	private Tree right;
