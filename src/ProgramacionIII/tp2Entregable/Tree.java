@@ -269,9 +269,13 @@ public class Tree {
 		
 		if(this.left != null)
 			this.left.printPreOrder();
+		else
+			System.out.print("-");
 		
 		if(this.right != null)
 			this.right.printPreOrder();
+		else
+			System.out.print("-");
 	}
 	
 	/*
