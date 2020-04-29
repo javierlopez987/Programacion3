@@ -378,4 +378,20 @@ public class Tree {
 		
 		return tmp;
 	}
+	
+	public int getCantElem() {
+		int cantidad = 0;
+		
+		if(this.left != null) {
+			cantidad += this.left.getCantElem();
+		}
+		
+		cantidad++;
+		
+		if(this.right != null) {
+			cantidad += this.right.getCantElem();
+		}
+		
+		return cantidad;
+	}
 }
