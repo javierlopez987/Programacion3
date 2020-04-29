@@ -193,22 +193,8 @@ public class Tree {
 		if(value < this.value) {
 			if(this.left != null) {
 				if(this.left.getValue() == value) { 	// Pregunta desde el padre
-					if(this.left.isLeaf()) {			// Caso 1: es hoja
-						this.left = null;
-						deletion = true;
-					} else if (this.left.isComplete()){	// Caso 2: tiene dos hijos
-						Integer NMDSI = this.left.getNMDSI(); // Complejidad del metodo invocado: O(h)
-						deletion = this.left.delete(NMDSI); // Complejidad del metodo invocado: O(h)
-						this.left.setValue(NMDSI);
-					} else {							// Caso 3: tiene un hijo
-						if(this.left.left != null) {
-							this.left = this.left.left;
-						} else {
-							this.left = this.left.right;
-						}
-						this.left.level--; // Controla el indicador de nivel en este unico caso de borrado que tiene efecto en los niveles
-						deletion = true;
-					}
+					this.left = this.deletion(this.left);
+					deletion = true;
 				} else {
 					deletion = this.left.delete(value); // O(h)
 				}
@@ -218,22 +204,8 @@ public class Tree {
 		} else if (value > this.value) {
 			if(this.right != null) {
 				if(this.right.getValue() == value) { 	// Pregunta desde el padre
-					if(this.right.isLeaf()) { 				// Caso 1: es hoja
-						this.right = null;
-						deletion = true;
-					} else if(this.right.isComplete()) {	// Caso 2: tiene dos hijos
-						Integer NMDSI = this.right.getNMDSI(); // Complejidad del metodo invocado: O(h)
-						deletion = this.right.delete(NMDSI); // Complejidad del metodo invocado: O(h)
-						this.right.setValue(NMDSI);
-					} else { 							// Caso 3: tiene un hijo
-						if(this.right.left != null) { 
-							this.right = this.right.left;
-						} else {
-							this.right = this.right.right;
-						}
-						this.right.level--; // Controla el indicador de nivel en este unico caso de borrado que tiene efecto en los niveles
-						deletion = true;
-					}
+					this.right = this.deletion(this.right);
+					deletion = true;
 				} else {
 					deletion = this.right.delete(value); // O(h)
 				}
@@ -258,6 +230,26 @@ public class Tree {
 		}
 		
 		return deletion;
+	}
+	
+	private Tree deletion(Tree rama) {
+		
+		if(rama.isLeaf()) { 				// Caso 1: es hoja
+			rama = null;
+		} else if(rama.isComplete()) {	// Caso 2: tiene dos hijos
+			Integer NMDSI = rama.getNMDSI(); // Complejidad del metodo invocado: O(h)
+			rama.delete(NMDSI); // Complejidad del metodo invocado: O(h)
+			rama.setValue(NMDSI);
+		} else { 							// Caso 3: tiene un hijo
+			if(rama.left != null) { 
+				rama = rama.left;
+			} else {
+				rama = rama.right;
+			}
+			rama.level--; // Controla el indicador de nivel en este unico caso de borrado que tiene efecto en los niveles
+		}
+		
+		return rama;
 	}
 	
 	/*
