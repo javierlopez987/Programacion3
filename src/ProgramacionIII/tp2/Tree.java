@@ -202,6 +202,25 @@ public class Tree {
 					deletion = this.right.delete(value); // O(h)
 				}
 			}
+		} else {
+			if(this.isLeaf()) {
+				this.setValue(null);
+				deletion = true;
+			} else if(this.isComplete()) {
+				Integer NMDSI = this.getNMDSI(); // O(h)
+				deletion = this.delete(NMDSI); // O(h)
+				this.setValue(NMDSI);
+			} else {
+				if(this.left != null) {
+					this.value = this.left.getValue();
+					this.right = this.left.right;
+					this.left = this.left.left;
+				} else {
+					this.value = this.right.getValue();
+					this.left = this.right.left;
+					this.right = this.right.right;
+				}
+			}
 		}
 		return deletion;
 	}
@@ -253,51 +272,27 @@ public class Tree {
 	}
 	
 	/*
-	 * Complejidad O(n) donde n es la cantidad de elementos de un subarbol.
-	 * En el peor de los casos y suponiendo que h es la altura del arbol, 
-	 * recorre dos veces la altura de la rama izquierda (h-1)
-	 * para obtener la altura de esa rama, 
-	 * luego recorre dos veces la altura de la rama derecha (h-1) para obtener su altura 
-	 * -propio de la implementación de getHeight()-
-	 * Luego compara las alturas de ramas, elige la más larga y recorre todos sus elementos (n)
-	 * Por lo tanto en el peor de los casos es O(4(h-1)) + O(n)
+	 * Complejidad O(n) donde n es la cantidad de elementos del arbol.
+	 * En el peor de los casos recorre cada uno de los elementos del arbol.
 	 */
 	public List<Integer> getLongestBranch() {
 		List<Integer> tmp = new LinkedList<Integer>();
-		int leftHeight = 0;
-		int rightHeight = 0;
+		List<Integer> leftBranch = new LinkedList<Integer>();
+		List<Integer> rightBranch = new LinkedList<Integer>();
 		
 		
 		if(this.left != null) {
-			leftHeight = this.left.getHeight(); // O(h)
+			leftBranch.addAll(this.left.getLongestBranch()); // O(h)
 		}
 		if(this.right != null) {
-			rightHeight = this.right.getHeight(); // O(h)
-		}
-		
-		if(leftHeight >= rightHeight) { // O(n) 
-			tmp.addAll(this.left.getBranch()); 
-		} else {
-			tmp.addAll(this.right.getBranch());
-		}
-		
-		return tmp;
-	}
-
-	/*
-	 * Complejidad: O(n) donde n es la cantidad de elementos del subarbol
-	 */
-	private List<Integer> getBranch() {
-		List<Integer> tmp = new LinkedList<Integer>();
-		
-		if(this.left != null) {
-			tmp.addAll(this.left.getBranch());
+			rightBranch.addAll(this.right.getLongestBranch()); // O(h)
 		}
 		
 		tmp.add(this.getValue());
-		
-		if(this.right != null) {
-			tmp.addAll(this.right.getBranch());
+		if(leftBranch.size() >= rightBranch.size()) { // O(n) 
+			tmp.addAll(leftBranch); 
+		} else {
+			tmp.addAll(rightBranch);
 		}
 		
 		return tmp;
