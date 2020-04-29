@@ -133,6 +133,18 @@ public class Tree {
 		return max;
 	}
 	
+	public Integer getMinElem() {
+		Integer min = null;
+		
+		if(this.left != null) {
+			min = this.left.getMinElem();
+		} else {
+			min = this.value;
+		}
+		
+		return min;
+	}
+	
 	/*
 	 * Complejidad: 0(h) donde h es la altura del arbol.
 	 * En el peor de los casos comenzará desde el primer nivel [root],
@@ -146,6 +158,16 @@ public class Tree {
 		}
 		
 		return NMDSI;
+	}
+	
+	private Integer getNMISD() {
+		Integer NMISD = null;
+		
+		if(this.right != null) {
+			NMISD = this.right.getMinElem();
+		}
+		
+		return NMISD;
 	}
 	
 	/*
@@ -206,20 +228,14 @@ public class Tree {
 			if(this.isLeaf()) {
 				this.setValue(null);
 				deletion = true;
-			} else if(this.isComplete()) {
+			} else if(this.isComplete() || this.left != null) {
 				Integer NMDSI = this.getNMDSI(); // O(h)
 				deletion = this.delete(NMDSI); // O(h)
 				this.setValue(NMDSI);
 			} else {
-				if(this.left != null) {
-					this.value = this.left.getValue();
-					this.right = this.left.right;
-					this.left = this.left.left;
-				} else {
-					this.value = this.right.getValue();
-					this.left = this.right.left;
-					this.right = this.right.right;
-				}
+				Integer NMISD = this.getNMISD(); // O(h)
+				deletion = this.delete(NMISD); // O(h)
+				this.setValue(NMISD);
 			}
 		}
 		return deletion;
