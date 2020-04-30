@@ -4,17 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Tree {
-	private final static int ROOTLEVEL = 0;
 	private int value;
 	private Tree left;
 	private Tree right;
-	private int level;
 
 	public Tree(int value) {
 		this.value = value;
 		this.left = null;
 		this.right = null;
-		this.level = ROOTLEVEL;
 	}
 	
 	public Integer getValue() {
@@ -24,29 +21,22 @@ public class Tree {
 	private void setValue(Integer value) {
 		this.value = value;
 	}
-	
-	private void setLevel(int level) {
-		this.level = level;
-	}
 
 	/* 
 	 * Se agrega condición: si ya existe el valor ingresado no hace nada.
 	 * Se agrega indicador de nivel.
 	 */
 	public void add(int newValue) {
-		int level = this.level;
 		
 		if (newValue < this.value) {
 			if (this.left == null) {
 				this.left = new Tree(newValue);
-				this.left.setLevel(++level);
 			}
 			else
 				this.left.add(newValue);
 		} else if(newValue > this.value ){
 			if (this.right == null) {
 				this.right = new Tree(newValue);
-				this.right.setLevel(++level);
 			}
 			else
 				this.right.add(newValue);
@@ -246,7 +236,6 @@ public class Tree {
 			} else {
 				rama = rama.right;
 			}
-			rama.level--; // Controla el indicador de nivel en este unico caso de borrado que tiene efecto en los niveles
 		}
 		
 		return rama;
@@ -360,15 +349,14 @@ public class Tree {
 	public List<Integer> getElemAtLevel(int level) {
 		List<Integer> tmp = new LinkedList<Integer>();
 		
-		
-		if(this.level == level) {
+		if(level == 0) {
 			tmp.add(this.getValue());
-		} else if (this.level < level){ //controla la busqueda
+		} else {
 			if(this.left != null) {
-				tmp.addAll(this.left.getElemAtLevel(level));
+				tmp.addAll(this.left.getElemAtLevel(level - 1));
 			}
 			if(this.right !=null) {
-				tmp.addAll(this.right.getElemAtLevel(level));
+				tmp.addAll(this.right.getElemAtLevel(level - 1));
 			}
 		}
 		
