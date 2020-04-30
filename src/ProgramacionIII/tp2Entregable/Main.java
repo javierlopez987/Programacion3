@@ -1,196 +1,93 @@
 package ProgramacionIII.tp2Entregable;
 
 public class Main {
+	final static int MAXNUM = 40;
+	final static int MAXNODE = 15; 
+	final static int MAXDELETE = 10;
 
 	public static void main(String[] args) {
-		Tree arbol = new Tree(50);
+		Tree arbol = generarArbol();
 		
-		//procesarTest1(arbol);
-		//procesarTest2(arbol);
-		procesarTest3(arbol);
+		procesarTestRandom(arbol);
 		
 	}
 	
-	public static void procesarTest1(Tree arbol) {
-		arbol.add(20);
-		arbol.add(80);
-		arbol.add(15);
-		arbol.add(10);
-		arbol.add(18);
-		arbol.add(25);
-		arbol.add(22);
-		arbol.add(45);
-		arbol.add(40);
-		arbol.add(46);
-		arbol.add(39);
-		arbol.add(47);
-		arbol.add(99);
-		arbol.add(60);
-		arbol.add(25);
-		arbol.add(42);
-		arbol.add(41);
-		arbol.add(44);
-		arbol.add(43);
-		
-		arbol.printPreOrder();
-		System.out.println();
+	public static void procesarTestRandom(Tree arbol) {
+		System.out.print("InOrder: ");
 		arbol.printInOrder();
 		System.out.println();
+		
+		System.out.print("PreOrder: ");
+		arbol.printPreOrder();
+		System.out.println();
+		
+		System.out.print("PosOrder: ");
 		arbol.printPosOrder();
 		System.out.println();
 		
-		//System.out.println(arbol.hasElem(10));
-		System.out.println(arbol.hasElem(45));
-		//System.out.println(arbol.hasElem(50));
-		//System.out.println(arbol.hasElem(99));
-		//System.out.println(arbol.hasElem(9));
+		System.out.print("Cantidad de Elementos: ");
+		System.out.println(arbol.getCantElem());
 		
-		System.out.println("getHeight():");
+		System.out.print("Altura: ");
 		System.out.println(arbol.getHeight());
 		
-		System.out.println("getFrontera():");
+		System.out.print("Frontera: ");
 		System.out.println(arbol.getFrontera());
 		
-		System.out.println("getLongestBranch():");
+		System.out.print("LongestBranch: ");
 		System.out.println(arbol.getLongestBranch());
 		
-		System.out.println("getElemAtLevel(4):");
-		System.out.println(arbol.getElemAtLevel(4));
+		System.out.println("Arbol");
+		for(int i = 0; i < arbol.getHeight(); i++) {
+			System.out.println("Nivel " + i + ": " + arbol.getElemAtLevel(i));
+		}
 		
-		System.out.println("getElemAtLevel(8):");
-		System.out.println(arbol.getElemAtLevel(8));
+		for(int i = 0; i < MAXDELETE; i++) {
+			int toBeDelete = getRandomValue();
+			if(arbol.delete(toBeDelete)) {
+				System.out.println("Deleted:" + toBeDelete);
+			}
+		}
 		
-		//arbol.delete(45);
-		arbol.delete(50);
-		
-		arbol.printPreOrder();
-		System.out.println();
+		System.out.print("InOrder: ");
 		arbol.printInOrder();
 		System.out.println();
+		
+		System.out.print("PreOrder: ");
+		arbol.printPreOrder();
+		System.out.println();
+		
+		System.out.print("PosOrder: ");
 		arbol.printPosOrder();
 		System.out.println();
-		System.out.println(arbol.hasElem(45));
+		
+		System.out.print("Cantidad de Elementos: ");
+		System.out.println(arbol.getCantElem());
+		
+		System.out.print("Altura: ");
 		System.out.println(arbol.getHeight());
 		
-		System.out.println(arbol.getLongestBranch());
-		
-		System.out.println(arbol.getFrontera());
-		
-		System.out.println(arbol.getElemAtLevel(4));
-		
-		System.out.println(arbol.getElemAtLevel(8));
+		System.out.println("Arbol");
+		for(int i = 0; i < arbol.getHeight(); i++) {
+			System.out.println("Nivel " + i + ": " + arbol.getElemAtLevel(i));
+		}
 	}
 	
-	public static void procesarTest2(Tree arbol) {
-		arbol.add(20);
-		//arbol.add(80);
-		arbol.add(15);
-		arbol.add(10);
-		arbol.add(18);
-		arbol.add(25);
-		arbol.add(22);
-		arbol.add(45);
-		arbol.add(40);
-		arbol.add(46);
-		arbol.add(39);
-		arbol.add(47);
-		//arbol.add(99);
-		//arbol.add(60);
-		arbol.add(25);
-		arbol.add(42);
-		arbol.add(41);
-		arbol.add(44);
-		arbol.add(43);
-		
-		arbol.printPreOrder();
-		System.out.println();
-		arbol.printInOrder();
-		System.out.println();
-		arbol.printPosOrder();
-		System.out.println();
-		
-		//System.out.println(arbol.hasElem(10));
-		System.out.println(arbol.hasElem(45));
-		//System.out.println(arbol.hasElem(50));
-		//System.out.println(arbol.hasElem(99));
-		//System.out.println(arbol.hasElem(9));
-		
-		System.out.println(arbol.getHeight());
-		
-		System.out.println(arbol.getFrontera());
-		
-		System.out.println(arbol.getLongestBranch());
-		
-		System.out.println(arbol.getElemAtLevel(4));
-		
-		System.out.println(arbol.getElemAtLevel(8));
-		
-		//arbol.delete(45);
-		arbol.delete(50);
-		
-		arbol.printPreOrder();
-		System.out.println();
-		arbol.printInOrder();
-		System.out.println();
-		arbol.printPosOrder();
-		System.out.println();
-		System.out.println(arbol.hasElem(45));
-		System.out.println(arbol.getHeight());
-		
-		System.out.println(arbol.getLongestBranch());
-		
-		System.out.println(arbol.getFrontera());
-		
-		System.out.println(arbol.getElemAtLevel(4));
-		
-		System.out.println(arbol.getElemAtLevel(8));
+	public static int getRandomValue() {
+		return ((int)(Math.random() * MAXNUM) + 1);
 	}
 	
-	public static void procesarTest3(Tree arbol) {
-		arbol.add(80);
-		arbol.add(99);
-		arbol.add(60);
+	public static Tree generarArbol() {
+		int randomValue = getRandomValue();
+		Tree arbol = new Tree(randomValue);
 		
-		System.out.println("printInOrder():");
-		arbol.printInOrder();
-		System.out.println();
-		
-		System.out.println("getHeight():");
-		System.out.println(arbol.getHeight());
-		
-		System.out.println("getFrontera():");
-		System.out.println(arbol.getFrontera());
-		
-		System.out.println("getLongestBranch():");
-		System.out.println(arbol.getLongestBranch());
-		
-		System.out.println("getElemAtLevel(4):");
-		System.out.println(arbol.getElemAtLevel(4));
-		
-		System.out.println("getElemAtLevel(8):");
-		System.out.println(arbol.getElemAtLevel(8));
-		
-		System.out.println(arbol.delete(45));
-		//System.out.println(arbol.delete(50));
-		
-		System.out.println("printInOrder():");
-		arbol.printInOrder();
-		System.out.println();
-		
-		
-		System.out.println("getHeight():");
-		System.out.println(arbol.getHeight());
-		
-		System.out.println("getFrontera():");
-		System.out.println(arbol.getFrontera());
-		
-		System.out.println("getLongestBranch():");
-		System.out.println(arbol.getLongestBranch());
-		
-		System.out.println("getElemAtLevel(4):");
-		System.out.println(arbol.getElemAtLevel(4));
-		
-		System.out.println("getElemAtLevel(8):");
-		System.out.println(arbol.getElemAtLevel(8));
+		System.out.print("Secuencia de valores ingresados: ");
+		while(arbol.getCantElem() < MAXNODE) {
+			System.out.print(randomValue + ", ");
+			randomValue = getRandomValue();
+			arbol.add(randomValue);
+		}
+		System.out.println(randomValue);
+		return arbol;
 	}
 }
