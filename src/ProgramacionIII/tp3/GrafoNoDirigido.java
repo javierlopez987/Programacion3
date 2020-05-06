@@ -13,5 +13,4 @@ public class GrafoNoDirigido<T> extends GrafoDirigido<T> {
 		super.borrarArco(verticeId1, verticeId2);
 		super.borrarArco(verticeId2, verticeId1);
 	}
-
 }

@@ -29,5 +29,4 @@ public class Arco<T> {
 	public T getEtiqueta() {
 		return etiqueta;
 	}
-
 }

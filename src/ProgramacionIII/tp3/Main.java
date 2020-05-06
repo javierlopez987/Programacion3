@@ -19,5 +19,4 @@ public class Main {
 		
 		System.out.println(etiqueta); // Debería imprimir 3
 	}
-
 }
