@@ -2,19 +2,17 @@ package ProgramacionIII.tp3Entregable;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class GrafoDirigido<T> implements Grafo<T> {
-	private Map<Integer, List<Arco<T>>> vertices;
-	private List<Arco<T>> aristas;
+	private Map<Integer, Map<Integer, Arco<T>>> vertices;
+	private Map<Integer, Arco<T>> aristas;
 	
 	
 	public GrafoDirigido() {
 		// TODO Auto-generated constructor stub
-		this.vertices = new LinkedHashMap<Integer, List<Arco<T>>>();
-		this.aristas = new LinkedList<Arco<T>>();
+		this.vertices = new LinkedHashMap<Integer, Map<Integer, Arco<T>>>();
+		this.aristas = new LinkedHashMap<Integer, Arco<T>>();
 	}
 	
 	@Override
