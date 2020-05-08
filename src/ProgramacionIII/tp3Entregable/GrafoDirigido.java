@@ -20,19 +20,18 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void agregarVertice(int verticeId) {
 		// TODO Auto-generated method stub
-
+		this.vertices.put(verticeId, null);
 	}
 
 	@Override
 	public void borrarVertice(int verticeId) {
 		// TODO Auto-generated method stub
-
+		this.vertices.remove(verticeId);
 	}
 
 	@Override
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
