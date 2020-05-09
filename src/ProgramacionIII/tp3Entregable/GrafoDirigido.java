@@ -50,14 +50,26 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public boolean existeArco(int verticeId1, int verticeId2) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean existe = false;
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
+		
+		if(tmp != null) {
+			existe = tmp.containsKey(verticeId2);
+		}
+		
+		return existe;
 	}
 
 	@Override
 	public Arco<T> obtenerArco(int verticeId1, int verticeId2) {
-		// TODO Auto-generated method stub
-		return null;
+		Arco<T> result = null;
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
+		
+		if(tmp != null) {
+			result = tmp.get(verticeId2);
+		}
+		
+		return result;
 	}
 
 	@Override
