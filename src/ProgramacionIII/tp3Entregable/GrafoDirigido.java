@@ -38,9 +38,9 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
-		tmp.remove(verticeId2);
-		this.vertices.put(verticeId1, tmp);
-
+		if(tmp != null) {
+			tmp.remove(verticeId2);
+		}
 	}
 
 	@Override
