@@ -6,42 +6,40 @@ import java.util.Map;
 
 public class GrafoDirigido<T> implements Grafo<T> {
 	private Map<Integer, Map<Integer, Arco<T>>> vertices;
-	private Map<Integer, Arco<T>> aristas;
 	
 	
 	public GrafoDirigido() {
-		// TODO Auto-generated constructor stub
 		this.vertices = new LinkedHashMap<Integer, Map<Integer, Arco<T>>>();
-		this.aristas = new LinkedHashMap<Integer, Arco<T>>();
 	}
 	
 	@Override
 	public void agregarVertice(int verticeId) {
-		// TODO Auto-generated method stub
 		this.vertices.put(verticeId, null);
 	}
 
 	@Override
 	public void borrarVertice(int verticeId) {
-		// TODO Auto-generated method stub
 		this.vertices.remove(verticeId);
 	}
 
 	@Override
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
-		// TODO Auto-generated method stub
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
+		tmp.put(verticeId2, new Arco<T>(verticeId1, verticeId2, etiqueta));
+		this.vertices.put(verticeId1, tmp);
 	}
 
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
-		// TODO Auto-generated method stub
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
+		tmp.remove(verticeId2);
+		this.vertices.put(verticeId1, tmp);
 
 	}
 
 	@Override
 	public boolean contieneVertice(int verticeId) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.vertices.containsKey(verticeId);
 	}
 
 	@Override
