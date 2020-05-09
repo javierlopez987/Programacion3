@@ -25,8 +25,14 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
-		tmp.put(verticeId2, new Arco<T>(verticeId1, verticeId2, etiqueta));
-		this.vertices.put(verticeId1, tmp);
+		Arco<T> nuevo = new Arco<T>(verticeId1, verticeId2, etiqueta);
+		if(tmp == null) {
+			tmp = new LinkedHashMap<Integer, Arco<T>>();
+		}
+		if(!tmp.containsKey(verticeId2)) {
+			tmp.put(verticeId2, nuevo);
+			this.vertices.put(verticeId1, tmp);
+		}
 	}
 
 	@Override
