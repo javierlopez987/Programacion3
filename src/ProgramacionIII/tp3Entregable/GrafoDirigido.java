@@ -3,6 +3,7 @@ package ProgramacionIII.tp3Entregable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class GrafoDirigido<T> implements Grafo<T> {
@@ -81,25 +82,33 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public Iterator<Integer> obtenerVertices() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.vertices.keySet().iterator();
 	}
 
 	@Override
 	public Iterator<Integer> obtenerAdyacentes(int verticeId) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId);
+		
+		return tmp.keySet().iterator();
 	}
 
 	@Override
 	public Iterator<Arco<T>> obtenerArcos() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Map<Integer, Arco<T>>> tmp = this.vertices.values();
+		Collection<Arco<T>> arcos = new LinkedList<>();
+		
+		Iterator<Map<Integer, Arco<T>>> it = tmp.iterator();
+		while(it.hasNext()) {
+			arcos.addAll(it.next().values());
+		}
+		
+		return arcos.iterator();
 	}
 
 	@Override
 	public Iterator<Arco<T>> obtenerArcos(int verticeId) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId);
+		
+		return tmp.values().iterator();
 	}
 }
