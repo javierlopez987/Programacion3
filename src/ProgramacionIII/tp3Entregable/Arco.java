@@ -29,4 +29,9 @@ public class Arco<T> {
 	public T getEtiqueta() {
 		return etiqueta;
 	}
+	
+	public String toString() {
+		return "Origen: " + this.verticeOrigen + " Destino: " + this.verticeDestino +
+				" - Etiqueta: " + this.etiqueta;
+	}
 }
