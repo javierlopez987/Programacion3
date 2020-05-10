@@ -1,5 +1,6 @@
 package ProgramacionIII.tp3Entregable;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	
 	@Override
 	public void agregarVertice(int verticeId) {
-		this.vertices.put(verticeId, null);
+		this.vertices.put(verticeId, new LinkedHashMap<Integer, Arco<T>>());
 	}
 
 	@Override
@@ -25,11 +26,9 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
-		Arco<T> nuevo = new Arco<T>(verticeId1, verticeId2, etiqueta);
-		if(tmp == null) {
-			tmp = new LinkedHashMap<Integer, Arco<T>>();
-		}
+		
 		if(!tmp.containsKey(verticeId2)) {
+			Arco<T> nuevo = new Arco<T>(verticeId1, verticeId2, etiqueta);
 			tmp.put(verticeId2, nuevo);
 			this.vertices.put(verticeId1, tmp);
 		}
@@ -38,50 +37,46 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
-		if(tmp != null) {
-			tmp.remove(verticeId2);
-		}
+		
+		tmp.remove(verticeId2);
 	}
 
 	@Override
 	public boolean contieneVertice(int verticeId) {
+		
 		return this.vertices.containsKey(verticeId);
 	}
 
 	@Override
 	public boolean existeArco(int verticeId1, int verticeId2) {
-		boolean existe = false;
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
 		
-		if(tmp != null) {
-			existe = tmp.containsKey(verticeId2);
-		}
-		
-		return existe;
+		return tmp.containsKey(verticeId2);
 	}
 
 	@Override
 	public Arco<T> obtenerArco(int verticeId1, int verticeId2) {
-		Arco<T> result = null;
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
 		
-		if(tmp != null) {
-			result = tmp.get(verticeId2);
-		}
-		
-		return result;
+		return tmp.get(verticeId2);
 	}
 
 	@Override
 	public int cantidadVertices() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.vertices.size();
 	}
 
 	@Override
 	public int cantidadArcos() {
-		// TODO Auto-generated method stub
-		return 0;
+		Collection<Map<Integer, Arco<T>>> tmp = this.vertices.values();
+		int size = 0;
+		
+		Iterator<Map<Integer, Arco<T>>> it = tmp.iterator();
+		while(it.hasNext()) {
+			size += it.next().size();
+		}
+		
+		return size;
 	}
 
 	@Override
