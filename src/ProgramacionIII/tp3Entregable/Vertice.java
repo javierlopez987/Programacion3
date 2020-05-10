@@ -19,6 +19,10 @@ public class Vertice {
 		this.finishing = time;
 	}
 	
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
 	public String getColor() {
 		return this.color;
 	}
