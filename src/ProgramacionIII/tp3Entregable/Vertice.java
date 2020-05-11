@@ -34,4 +34,10 @@ public class Vertice {
 	public int getFinishingTime() {
 		return this.finishing;
 	}
+	
+	public String toString() {
+		return "Color: " + this.color + 
+				" DiscoveryTime: " + this.discovery + 
+				" FinishingTime: " + this.finishing;
+	}
 }
