@@ -31,29 +31,29 @@ public class DFS<T> {
 		Iterator<Vertice> itVertice = this.verticesDFS.values().iterator();
 		
 		while(itVerticeId.hasNext() && itVertice.hasNext()) {
-			if(itVertice.next().getColor() == BLANCO) {
+			if(itVertice.next().getEstado() == BLANCO) {
 				this.visit(itVerticeId.next());
 			}
 		}
 	}
 	
 	private void visit(Integer verticeId) {
-		this.verticesDFS.get(verticeId).setColor(AMARILLO);;
+		this.verticesDFS.get(verticeId).setEstado(AMARILLO);;
 		this.tiempo = this.tiempo + 1;
 		this.verticesDFS.get(verticeId).setDiscoveryTime(this.tiempo);
 		
 		Iterator<Integer> itAdyacentesId = this.grafo.obtenerAdyacentes(verticeId);
 		while(itAdyacentesId.hasNext()) {
 			Integer adyacenteId = itAdyacentesId.next();
-			if(this.verticesDFS.get(adyacenteId).getColor() == BLANCO) {
+			if(this.verticesDFS.get(adyacenteId).getEstado() == BLANCO) {
 				this.visit(adyacenteId);
-			} else if (this.verticesDFS.get(adyacenteId).getColor() == AMARILLO) {
+			} else if (this.verticesDFS.get(adyacenteId).getEstado() == AMARILLO) {
 				System.out.println("Grafo cíclico verificado en arco " + 
 						this.grafo.obtenerArco(verticeId, adyacenteId));
 			}
 		}
 		
-		this.verticesDFS.get(verticeId).setColor(NEGRO);
+		this.verticesDFS.get(verticeId).setEstado(NEGRO);
 		this.tiempo = this.tiempo + 1;
 		this.verticesDFS.get(verticeId).setFinishingTime(this.tiempo);
 		System.out.println("Vertice Id: " + verticeId);

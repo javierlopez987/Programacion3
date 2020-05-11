@@ -1,12 +1,12 @@
 package ProgramacionIII.tp3Entregable;
 
 public class Vertice {
-	private String color;
+	private String estado;
 	private int discovery;
 	private int finishing;
 	
-	public Vertice(String color) {
-		this.color = color;
+	public Vertice(String estado) {
+		this.estado = estado;
 		this.discovery = 0;
 		this.finishing = 0;
 	}
@@ -19,12 +19,12 @@ public class Vertice {
 		this.finishing = time;
 	}
 	
-	public void setColor(String color) {
-		this.color = color;
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	
-	public String getColor() {
-		return this.color;
+	public String getEstado() {
+		return this.estado;
 	}
 	
 	public int getDiscoveryTime() {
@@ -36,7 +36,7 @@ public class Vertice {
 	}
 	
 	public String toString() {
-		return "Color: " + this.color + 
+		return "Estado: " + this.estado + 
 				" DiscoveryTime: " + this.discovery + 
 				" FinishingTime: " + this.finishing;
 	}
