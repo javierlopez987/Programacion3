@@ -1,18 +1,12 @@
 package ProgramacionIII.tp3Entregable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Main {
-	
-	private static int contador;
 	
 	public static void main(String[] args) {
 		//Colección de tareas
@@ -61,7 +55,6 @@ public class Main {
 		grafito.agregarArco(8, 9, 4);
 		grafito.agregarArco(9, 10, 1);
 		grafito.agregarArco(11, 12, 9);
-		//grafito.agregarArco(12, 0, 15); // grafo cíclico
 		
 		//Obtengo cantidad de vértices y de arcos
 		grafito.cantidadVertices();
@@ -82,37 +75,15 @@ public class Main {
 		}
 		
 		//Secuecia de ejecucion critica
-		Tarea inicio = mapeo.get(0);
-		Map<Integer, Integer> sec = getSecuencia(mapeo, grafito, inicio);
+		Map<Integer, Integer> sec = getSecuencia(mapeo, grafito, 0);
 		System.out.println(sec.keySet());
-		System.out.println(contador);
-	}
-	/*
-	 * Complejidad: O(n) donde n es la cantidad de elementos del Map
-	 * En el peor de los casos tendrá que recorrer todos los elementos
-	 */
-	public static int indexOfTarea(Map<Integer, Tarea> mapeo, Tarea tarea) {
-		int index = -1;
-		
-		Iterator<Integer> itTareasId = mapeo.keySet().iterator();
-		Iterator<Tarea> itTareas = mapeo.values().iterator();
-		
-		while(itTareas.hasNext() && itTareasId.hasNext()) {
-			Integer aux = itTareasId.next();
-			Tarea tmp = itTareas.next();
-			if(tmp.equals(tarea)) {
-				index = aux;
-			}
-		}
-		
-		return index;
 	}
 	
-	public static Map<Integer, Integer> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, Tarea tarea) {
+	public static Map<Integer, Integer> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
 		Map<Integer, Integer> result = new HashMap<>();
 		Map<Integer, Integer> tmp = new HashMap<>();
 		
-		int verticeId = indexOfTarea(mapa, tarea);
+		Tarea tarea = mapa.get(verticeId);
 		int max = 0;
 		int sumaElementos = 0;
 		
@@ -121,7 +92,7 @@ public class Main {
 		while(itAdyacentesId.hasNext()) {
 			Integer adyacenteId = itAdyacentesId.next();
 			
-			tmp = getSecuencia(mapa, grafo, mapa.get(adyacenteId));
+			tmp = getSecuencia(mapa, grafo, adyacenteId);
 			
 			sumaElementos = tmp.get(adyacenteId);
 			sumaElementos += grafo.obtenerArco(verticeId, adyacenteId).getEtiqueta();
@@ -133,7 +104,6 @@ public class Main {
 		}
 		
 		result.put(tarea.getId(), tarea.getDuracion() + max);
-		contador++;
 		
 		return result;
 	}
