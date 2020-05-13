@@ -79,6 +79,11 @@ public class Main {
 		System.out.println(sec.keySet());
 	}
 	
+	/*
+	 * Complejidad: General O(n) donde n es la sumatoria de vertices adyacentes con repetición
+	 * En el peor de los casos ejecutará n veces el metodo cuya complejidad es O(1)
+	 * ya que se trata de consultas a estructuras eficientes
+	 */
 	public static Map<Integer, Integer> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
 		Map<Integer, Integer> result = new HashMap<>();
 		Map<Integer, Integer> tmp = new HashMap<>();
