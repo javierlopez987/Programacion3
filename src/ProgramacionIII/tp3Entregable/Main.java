@@ -1,5 +1,6 @@
 package ProgramacionIII.tp3Entregable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,20 +12,27 @@ import java.util.Set;
 
 public class Main {
 	
+	private static int contador;
+	
 	public static void main(String[] args) {
-		//Lista de tareas
+		//Colección de tareas
 		Set<Tarea> tareas = new HashSet<>();
 		
 		//Creo mapa para de tareas
 		Map<Integer, Tarea> mapeo = new HashMap<>();
 		
-		// Creo un grafo dirigdo donde las etiquetas de los arcos son valores Integer
+		// Creo un grafo dirigido donde las etiquetas de los arcos son valores Integer
 		GrafoDirigido<Integer> grafito = new GrafoDirigido<>();
 		
+		procesarTest(tareas, mapeo, grafito);
+		
+	}
+	
+	public static void procesarTest(Set<Tarea> tareas, Map<Integer, Tarea> mapeo, Grafo<Integer> grafito) {
 		//Horas de tareas
 		int[] horasTareas = {0, 4, 18, 4, 13, 22 , 18, 12, 3, 2, 3, 1, 5};
 		
-		//Se carga la lista con tareas
+		//Se carga la colección con tareas
 		for(int i =0; i < horasTareas.length; i++) {
 			tareas.add(new Tarea(i, horasTareas[i]));
 		}
@@ -60,10 +68,12 @@ public class Main {
 		grafito.cantidadArcos();
 		
 		//Imprimo los arcos del grafo
+		/*
 		Iterator<Arco<Integer>> itArcos = grafito.obtenerArcos();
 		while(itArcos.hasNext()) {
 			System.out.println(itArcos.next());
 		}
+		*/
 		
 		// Si existe, obtengo el arco entre 1 y 2, y le pido la etiqueta
 		if(grafito.existeArco(1, 2)) {
@@ -71,20 +81,16 @@ public class Main {
 			System.out.println(etiqueta); // Debería imprimir 3
 		}
 		
-		//Recorrido DFS
-		DFS<Integer> dfs = new DFS<Integer>(grafito);
-		dfs.start();
-		
-		//Recorrido BFS
-		BFS<Integer> bfs = new BFS<Integer>(grafito);
-		bfs.start();
-		
 		//Secuecia de ejecucion critica
 		Tarea inicio = mapeo.get(0);
-		List<Tarea> sec = getSecuencia(mapeo, grafito, inicio);
-		System.out.println(sec);
+		Map<Integer, Integer> sec = getSecuencia(mapeo, grafito, inicio);
+		System.out.println(sec.keySet());
+		System.out.println(contador);
 	}
-	
+	/*
+	 * Complejidad: O(n) donde n es la cantidad de elementos del Map
+	 * En el peor de los casos tendrá que recorrer todos los elementos
+	 */
 	public static int indexOfTarea(Map<Integer, Tarea> mapeo, Tarea tarea) {
 		int index = -1;
 		
@@ -102,20 +108,9 @@ public class Main {
 		return index;
 	}
 	
-	private static int getSumaElementos(List<Tarea> lista) {
-		int suma = 0;
-		
-		Iterator<Tarea> it = lista.iterator();
-		while(it.hasNext()) {
-			suma += it.next().getDuracion();
-		}
-		
-		return suma;
-	}
-	
-	public static List<Tarea> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, Tarea tarea) {
-		List<Tarea> result = new LinkedList<>();
-		List<Tarea> tmp = new LinkedList<>();
+	public static Map<Integer, Integer> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, Tarea tarea) {
+		Map<Integer, Integer> result = new HashMap<>();
+		Map<Integer, Integer> tmp = new HashMap<>();
 		
 		int verticeId = indexOfTarea(mapa, tarea);
 		int max = 0;
@@ -128,7 +123,7 @@ public class Main {
 			
 			tmp = getSecuencia(mapa, grafo, mapa.get(adyacenteId));
 			
-			sumaElementos = getSumaElementos(tmp);
+			sumaElementos = tmp.get(adyacenteId);
 			sumaElementos += grafo.obtenerArco(verticeId, adyacenteId).getEtiqueta();
 			
 			if(sumaElementos > max) {
@@ -137,9 +132,10 @@ public class Main {
 			}
 		}
 		
-		result.add(tarea);
-		Collections.sort(result);
+		result.put(tarea.getId(), tarea.getDuracion() + max);
+		contador++;
 		
 		return result;
 	}
+	
 }
