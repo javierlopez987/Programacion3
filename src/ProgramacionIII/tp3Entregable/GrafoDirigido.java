@@ -11,6 +11,10 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	
 	
 	public GrafoDirigido() {
+		/*
+		 * LinkedHashMap "es ligeramente más rápida a la hora de acceder a los elementos que su
+		 * superclase (HashMap), pero más lenta a la hora de añadirlos".
+		 */
 		this.vertices = new LinkedHashMap<Integer, Map<Integer, Arco<T>>>();
 	}
 	
@@ -21,6 +25,16 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public void borrarVertice(int verticeId) {
+		
+		Iterator<Integer> it = this.obtenerVertices();
+		
+		while(it.hasNext()) {
+			Integer auxId = it.next();
+			if(this.existeArco(auxId, verticeId)) {
+				this.borrarArco(auxId, verticeId);
+			}
+		}
+		
 		this.vertices.remove(verticeId);
 	}
 
@@ -91,7 +105,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		
 		return tmp.keySet().iterator();
 	}
-
+	
 	@Override
 	public Iterator<Arco<T>> obtenerArcos() {
 		Collection<Map<Integer, Arco<T>>> tmp = this.vertices.values();
