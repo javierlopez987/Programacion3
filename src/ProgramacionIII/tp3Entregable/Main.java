@@ -9,17 +9,19 @@ import java.util.Set;
 public class Main {
 	
 	public static void main(String[] args) {
-		//Colección de tareas
+		/*Colección de tareas
+		 * No se permite repetición de tareas con mismo id
+		 * Se comparan por id en metodo equals de Tarea
+		 */
 		Set<Tarea> tareas = new HashSet<>();
-		
-		//Creo mapa para de tareas
-		Map<Integer, Tarea> mapeo = new HashMap<>();
 		
 		// Creo un grafo dirigido donde las etiquetas de los arcos son valores Integer
 		GrafoDirigido<Integer> grafito = new GrafoDirigido<>();
 		
-		procesarTest(tareas, mapeo, grafito);
+		//Creo mapa que vinculará cada vertice del grafo con una tarea
+		Map<Integer, Tarea> mapeo = new HashMap<>();
 		
+		procesarTest(tareas, mapeo, grafito);
 	}
 	
 	public static void procesarTest(Set<Tarea> tareas, Map<Integer, Tarea> mapeo, Grafo<Integer> grafito) {
@@ -75,16 +77,16 @@ public class Main {
 		}
 		
 		//Secuecia de ejecucion critica
-		Map<Integer, Integer> sec = getSecuencia(mapeo, grafito, 0);
+		Map<Integer, Integer> sec = getCaminoCritico(mapeo, grafito, 0);
 		System.out.println(sec.keySet());
 	}
 	
 	/*
-	 * Complejidad: General O(n) donde n es la sumatoria de vertices adyacentes con repetición
-	 * En el peor de los casos ejecutará n veces el metodo cuya complejidad es O(1)
-	 * ya que se trata de consultas a estructuras eficientes
+	 * Complejidad: General O(n2) donde n es la cantidad de vertices 
+	 * En el peor de los casos ejecutará n-1 + n-2 + n-3 + n-4 + n-5 + ... + n-(n-1)
+	 * veces las consultas a la estructura hashmap
 	 */
-	public static Map<Integer, Integer> getSecuencia(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
+	public static Map<Integer, Integer> getCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
 		Map<Integer, Integer> result = new HashMap<>();
 		Map<Integer, Integer> tmp = new HashMap<>();
 		
@@ -97,7 +99,7 @@ public class Main {
 		while(itAdyacentesId.hasNext()) {
 			Integer adyacenteId = itAdyacentesId.next();
 			
-			tmp = getSecuencia(mapa, grafo, adyacenteId);
+			tmp = getCaminoCritico(mapa, grafo, adyacenteId);
 			
 			sumaElementos = tmp.get(adyacenteId);
 			sumaElementos += grafo.obtenerArco(verticeId, adyacenteId).getEtiqueta();
