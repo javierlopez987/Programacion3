@@ -7,6 +7,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class Main {
+	/*
+	 * Intenté con un Mapa de Mapas para registrar los costos acumulados por cada vertice 
+	 * y el correspondiente camino de indices de vertices
+	 * SIN EXITO - el indice del vertice lo guarda pero luego va actualizando la secuencia
+	 * de un indice ya cargado a medida que agrega el resto de los indices de vertices
+	 * Al final no obtiene una foto del indice y su secuencia segun el momento en el que paso
+	 * por el metodo sino un mapa que se va actulizando
+	 */
+	private Map<Integer, Map<Integer, Integer>> costos;
+	
 	private static int contador;
 	
 	public static void main(String[] args) {
