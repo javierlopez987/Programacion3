@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Main {
+	private static int contador;
 	
 	public static void main(String[] args) {
 		/*Colección de tareas
@@ -79,6 +80,7 @@ public class Main {
 		//Secuecia de ejecucion critica
 		Map<Integer, Integer> sec = getCaminoCritico(mapeo, grafito, 0);
 		System.out.println(sec.keySet());
+		System.out.println("El método getCaminoCritico se ejecuto: " + contador + " veces");
 	}
 	
 	/*
@@ -93,6 +95,8 @@ public class Main {
 		Tarea tarea = mapa.get(verticeId);
 		int max = 0;
 		int sumaElementos = 0;
+		int idTarea = tarea.getId();
+		int costoAcumuladoTarea = 0;
 		
 		Iterator<Integer> itAdyacentesId = grafo.obtenerAdyacentes(verticeId);
 		
@@ -110,7 +114,11 @@ public class Main {
 			}
 		}
 		
-		result.put(tarea.getId(), tarea.getDuracion() + max);
+		costoAcumuladoTarea = tarea.getDuracion() + max;
+		
+		result.put(idTarea, costoAcumuladoTarea);
+		
+		contador++;
 		
 		return result;
 	}
