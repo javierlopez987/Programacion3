@@ -3,6 +3,7 @@ package ProgramacionIII.tp3Entregable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,11 +16,14 @@ public class Main {
 	 * Al final no obtiene una foto del indice y su secuencia segun el momento en el que paso
 	 * por el metodo sino un mapa que se va actulizando
 	 */
-	private Map<Integer, Map<Integer, Integer>> costos;
+	private static Map<Integer, Map<Integer, Integer>> costos;
 	
-	private static int contador;
+	private static int contadorVertices;
+	private static int contadorArcos;
 	
 	public static void main(String[] args) {
+		costos = new HashMap<Integer, Map<Integer,Integer>>();
+		
 		/*Colección de tareas
 		 * No se permite repetición de tareas con mismo id
 		 * Se comparan por id en metodo equals de Tarea
@@ -69,6 +73,8 @@ public class Main {
 		grafito.agregarArco(8, 9, 4);
 		grafito.agregarArco(9, 10, 1);
 		grafito.agregarArco(11, 12, 9);
+		//grafito.agregarArco(3, 5, 2);
+		//grafito.agregarArco(0, 3, 6);
 		
 		//Obtengo cantidad de vértices y de arcos
 		grafito.cantidadVertices();
@@ -91,17 +97,20 @@ public class Main {
 		//Secuecia de ejecucion critica
 		Map<Integer, Integer> sec = getCaminoCritico(mapeo, grafito, 0);
 		System.out.println(sec.keySet());
-		System.out.println("El método getCaminoCritico se ejecuto: " + contador + " veces");
+		System.out.println("Complejidad método getCaminoCritico:  O(v) + O (a) => v = " + contadorVertices + "; a = " + contadorArcos);
+		
 	}
 	
-	/*
-	 * Complejidad: General O(n2) donde n es la cantidad de vertices 
-	 * En el peor de los casos ejecutará n-1 + n-2 + n-3 + n-4 + n-5 + ... + n-(n-1)
+	/* Solución anterior era de complejidad O(n!) donde n es la cantidad de vertices 
+	 * En el peor de los casos ejecutaba n-1 * n-2 * n-3 * n-4 * n-5 * ... * n-(n-1)
 	 * veces las consultas a la estructura hashmap
+	 * 
+	 * Esta solución tiene un complejidad O(v) + O(a)
+	 * donde v es la cantidad de vértices y a es la cantidad de arcos
 	 */
 	public static Map<Integer, Integer> getCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
-		Map<Integer, Integer> result = new HashMap<>();
-		Map<Integer, Integer> tmp = new HashMap<>();
+		Map<Integer, Integer> result = new LinkedHashMap<>();
+		Map<Integer, Integer> tmp;
 		
 		Tarea tarea = mapa.get(verticeId);
 		int max = 0;
@@ -112,16 +121,23 @@ public class Main {
 		Iterator<Integer> itAdyacentesId = grafo.obtenerAdyacentes(verticeId);
 		
 		while(itAdyacentesId.hasNext()) {
+			contadorArcos++;
+			
 			Integer adyacenteId = itAdyacentesId.next();
 			
-			tmp = getCaminoCritico(mapa, grafo, adyacenteId);
+			if(!costos.containsKey(adyacenteId)) {
+				tmp = getCaminoCritico(mapa, grafo, adyacenteId);
+			} else {
+				tmp = costos.get(adyacenteId);
+			}
 			
 			sumaElementos = tmp.get(adyacenteId);
 			sumaElementos += grafo.obtenerArco(verticeId, adyacenteId).getEtiqueta();
 			
 			if(sumaElementos > max) {
 				max = sumaElementos;
-				result = tmp;
+				result.clear();
+				result.putAll(tmp);
 			}
 		}
 		
@@ -129,7 +145,9 @@ public class Main {
 		
 		result.put(idTarea, costoAcumuladoTarea);
 		
-		contador++;
+		costos.put(idTarea, result);
+		
+		contadorVertices++;
 		
 		return result;
 	}
@@ -139,7 +157,7 @@ public class Main {
 	 * Testea los metodos del grafo
 	 */
 	public static void testGrafo(Grafo<Integer> grafo) {
-		final int MAX = 10;
+		final int MAX = 13;
 		
 		//Se carga el grafo
 		for(int i =0; i < MAX; i++) {
