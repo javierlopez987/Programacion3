@@ -42,7 +42,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
 		Map<Integer, Arco<T>> tmp = this.vertices.get(verticeId1);
 		
-		if(!tmp.containsKey(verticeId2)) {
+		if(!tmp.containsKey(verticeId2) && this.contieneVertice(verticeId2)) {
 			Arco<T> nuevo = new Arco<T>(verticeId1, verticeId2, etiqueta);
 			tmp.put(verticeId2, nuevo);
 			this.vertices.put(verticeId1, tmp);
