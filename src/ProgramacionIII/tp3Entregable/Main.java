@@ -22,6 +22,7 @@ public class Main {
 		//Creo mapa que vinculará cada vertice del grafo con una tarea
 		Map<Integer, Tarea> mapeo = new HashMap<>();
 		
+		testGrafo(grafito);
 		procesarTest(tareas, mapeo, grafito);
 	}
 	
@@ -122,5 +123,39 @@ public class Main {
 		
 		return result;
 	}
+
 	
+	/*
+	 * Testea los metodos del grafo
+	 */
+	public static void testGrafo(Grafo<Integer> grafo) {
+		final int MAX = 10;
+		
+		//Se carga el grafo
+		for(int i =0; i < MAX; i++) {
+			grafo.agregarVertice(i);
+		}
+		
+		for(int i = 0; i < MAX; i++) {
+			if(grafo.contieneVertice(i)) {
+				grafo.agregarArco(i, i + 2, 2*i);
+			}
+		}
+		
+		if(grafo.contieneVertice(MAX/2)) {
+			grafo.borrarVertice(MAX/2);
+		}
+		
+		if(grafo.contieneVertice(2)) {
+			grafo.borrarVertice(2);
+		}
+		
+		if(grafo.existeArco(1, 3)) {
+			grafo.borrarArco(1, 3);
+		}
+		
+		grafo.cantidadArcos();
+		grafo.cantidadVertices();
+		
+	}
 }
