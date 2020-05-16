@@ -1,7 +1,5 @@
 package ProgramacionIII.tp3Entregable;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -191,8 +189,6 @@ public class Main {
 	}
 	
 	public static void cargarDatosTestControlado(Set<Tarea> tareas, Map<Integer, Tarea> mapa, Grafo<Integer> grafo) {
-		final int DEFAULT = 0;
-		
 		//Horas de tareas
 		int[] valorTareas = {20, 80, 70, 55, 24, 10, 66, 32, 22, 14, 35, 99, 7, 5, 90, 88, 63, 74};
 		
@@ -210,75 +206,6 @@ public class Main {
 		}
 		
 		// Genero los arcos entre vértices
-		int i = 0;
-		int idOrigen;
-		int idDestino;
-		String salida = null;
-		boolean ingresoValido = false;
-		boolean menu = false;
 		
-		System.out.println("Se inicia la secuencia de carga de arcos");
-		while(salida != "q") {
-			idOrigen = -1;
-			idOrigen = -1;
-			BufferedReader entrada = new BufferedReader(new InputStreamReader(System.in));
-			
-			ingresoValido = false;
-			
-			while(!ingresoValido && !menu) {
-				try {
-					System.out.println("Ingrese vertice de origen");
-					idOrigen = new Integer(entrada.readLine());
-					if(grafo.contieneVertice(idOrigen)) {
-						ingresoValido = true;
-					} else if(idOrigen == -2) {
-						menu = true;
-					}
-				} catch (Exception e) {
-					System.out.println(e);
-				}
-			}
-			
-			ingresoValido = false;
-			
-			while(!ingresoValido && !menu) {
-				try {
-					System.out.println("Ingrese vertice de destino");
-					idDestino = new Integer(entrada.readLine());
-					if(grafo.contieneVertice(idDestino)) {
-						grafo.agregarArco(idOrigen, idDestino, DEFAULT);
-						System.out.println(grafo.obtenerArco(idOrigen, idDestino));
-						ingresoValido = true;
-					} else if(idDestino == -2) {
-						menu = true;
-					}
-				} catch (Exception e) {
-					System.out.println(e);
-				}
-			}
-			
-			if(menu) {
-				try {
-					System.out.println("Menú: q = salir; arcos = print arcos");
-					salida = entrada.readLine();
-					if(salida.equals("arcos") ) {
-						printArcos(grafo);
-						menu = false;
-					}
-				} catch (Exception e) {
-					System.out.println(e);
-				}
-			}
-		}
-		
-		System.out.println("Finaliza la secuencia de carga de arcos");
-	}
-	
-	public static void printArcos(Grafo<Integer> grafo) {
-		Iterator<Arco<Integer>> it = grafo.obtenerArcos();
-		
-		while(it.hasNext()) {
-			System.out.println(it.next());
-		}
 	}
 }
