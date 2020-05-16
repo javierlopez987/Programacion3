@@ -36,14 +36,17 @@ public class Main {
 		Map<Integer, Tarea> mapeoTest = new HashMap<>();
 		
 		cargarDatosTestControlado(tareasTest, mapeoTest, grafoTest);
+		grafoTest.cantidadVertices();
+		grafoTest.cantidadArcos();
+		//procesarTestGrafo(grafoTest);
 		
-		procesarTestGrafo(grafoTest);
+		procesarCaminoCritico(mapeoTest, grafoTest,INICIO);
 		
-		procesarCaminoCritico(mapeo, grafoTest,INICIO);
+		printArcos(grafoTest);
 		
-		cargarDatosEntregable(tareas, mapeo, grafito);
+		//cargarDatosEntregable(tareas, mapeo, grafito);
 		
-		procesarCaminoCritico(mapeo, grafito,INICIO);
+		//procesarCaminoCritico(mapeo, grafito,INICIO);
 	}
 	
 	public static void cargarDatosEntregable(Set<Tarea> tareas, Map<Integer, Tarea> mapeo, Grafo<Integer> grafito) {
@@ -82,23 +85,6 @@ public class Main {
 		//grafito.agregarArco(3, 5, 2);
 		//grafito.agregarArco(0, 3, 6);
 		
-		//Obtengo cantidad de vértices y de arcos
-		grafito.cantidadVertices();
-		grafito.cantidadArcos();
-		
-		//Imprimo los arcos del grafo
-		/*
-		Iterator<Arco<Integer>> itArcos = grafito.obtenerArcos();
-		while(itArcos.hasNext()) {
-			System.out.println(itArcos.next());
-		}
-		*/
-		
-		// Si existe, obtengo el arco entre 1 y 2, y le pido la etiqueta
-		if(grafito.existeArco(1, 2)) {
-			Integer etiqueta = grafito.obtenerArco(1, 2).getEtiqueta();
-			System.out.println(etiqueta); // Debería imprimir 3
-		}
 	}
 	
 	public static void procesarCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeIdInicial) {
@@ -193,7 +179,7 @@ public class Main {
 		int[] valorTareas = {20, 80, 70, 55, 24, 10, 66, 32, 22, 14, 35, 99, 7, 5, 90, 88, 63, 74};
 		
 		//Se carga la colección con tareas
-		for(int i =0; i < valorTareas.length; i++) {
+		for(int i = 0; i < valorTareas.length; i++) {
 			tareas.add(new Tarea(i, valorTareas[i]));
 		}
 		
@@ -206,6 +192,45 @@ public class Main {
 		}
 		
 		// Genero los arcos entre vértices
+		grafo.agregarArco(0, 1, 0);
+		grafo.agregarArco(0, 2, 0);
+		grafo.agregarArco(0, 5, 0);
+		grafo.agregarArco(0, 6, 0);
+		grafo.agregarArco(1, 4, 0);
+		grafo.agregarArco(1, 2, 0);
+		grafo.agregarArco(2, 3, 0);
+		grafo.agregarArco(3, 4, 0);
+		grafo.agregarArco(4, 10, 0);
+		grafo.agregarArco(10, 12, 0);
+		grafo.agregarArco(4, 13, 0);
+		grafo.agregarArco(12, 17, 0);
+		grafo.agregarArco(5, 7, 0);
+		grafo.agregarArco(7, 9, 0);
+		grafo.agregarArco(7, 4, 0);
+		grafo.agregarArco(9, 13, 0);
+		grafo.agregarArco(13, 17, 0);
+		grafo.agregarArco(6, 8, 0);
+		grafo.agregarArco(8, 11, 0);
+		grafo.agregarArco(11, 13, 0);
+		grafo.agregarArco(6, 14, 0);
+		grafo.agregarArco(14, 15, 0);
+		grafo.agregarArco(15, 16, 0);
+		grafo.agregarArco(16, 17, 0);
+	}
+	
+	public static void printArcos(Grafo<Integer> grafo) {
+		List<Arco<Integer>> lista = new LinkedList<>();
+		Iterator<Arco<Integer>> it = grafo.obtenerArcos();
 		
+		while(it.hasNext()) {
+			lista.add(it.next());
+		}
+		
+		Collections.sort(lista, new ComparadorArcos());
+		
+		Iterator<Arco<Integer>> itLista = lista.iterator();
+		while(itLista.hasNext()) {
+			System.out.println(itLista.next());
+		}
 	}
 }
