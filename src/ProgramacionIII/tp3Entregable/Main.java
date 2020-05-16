@@ -1,25 +1,23 @@
 package ProgramacionIII.tp3Entregable;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Main {
-	/*
-	 * Intenté con un Mapa de Mapas para registrar los costos acumulados por cada vertice 
-	 * y el correspondiente camino de indices de vertices
-	 * SIN EXITO - el indice del vertice lo guarda pero luego va actualizando la secuencia
-	 * de un indice ya cargado a medida que agrega el resto de los indices de vertices
-	 * Al final no obtiene una foto del indice y su secuencia segun el momento en el que paso
-	 * por el metodo sino un mapa que se va actulizando
-	 */
 	private static Map<Integer, Map<Integer, Integer>> costos;
 	
-	private static int contadorVertices;
-	private static int contadorArcos;
+	private static int INICIO = 0;
+	private static int contadorEjecucionPorVertice;
+	private static int contadorEjecucionPorArco;
 	
 	public static void main(String[] args) {
 		costos = new HashMap<Integer, Map<Integer,Integer>>();
@@ -29,18 +27,28 @@ public class Main {
 		 * Se comparan por id en metodo equals de Tarea
 		 */
 		Set<Tarea> tareas = new HashSet<>();
+		Set<Tarea> tareasTest = new HashSet<>();
 		
 		// Creo un grafo dirigido donde las etiquetas de los arcos son valores Integer
 		GrafoDirigido<Integer> grafito = new GrafoDirigido<>();
+		GrafoDirigido<Integer> grafoTest = new GrafoDirigido<>();
 		
 		//Creo mapa que vinculará cada vertice del grafo con una tarea
 		Map<Integer, Tarea> mapeo = new HashMap<>();
+		Map<Integer, Tarea> mapeoTest = new HashMap<>();
 		
-		testGrafo(grafito);
-		procesarTest(tareas, mapeo, grafito);
+		cargarDatosTestControlado(tareasTest, mapeoTest, grafoTest);
+		
+		procesarTestGrafo(grafoTest);
+		
+		procesarCaminoCritico(mapeo, grafoTest,INICIO);
+		
+		cargarDatosEntregable(tareas, mapeo, grafito);
+		
+		procesarCaminoCritico(mapeo, grafito,INICIO);
 	}
 	
-	public static void procesarTest(Set<Tarea> tareas, Map<Integer, Tarea> mapeo, Grafo<Integer> grafito) {
+	public static void cargarDatosEntregable(Set<Tarea> tareas, Map<Integer, Tarea> mapeo, Grafo<Integer> grafito) {
 		//Horas de tareas
 		int[] horasTareas = {0, 4, 18, 4, 13, 22 , 18, 12, 3, 2, 3, 1, 5};
 		
@@ -93,22 +101,24 @@ public class Main {
 			Integer etiqueta = grafito.obtenerArco(1, 2).getEtiqueta();
 			System.out.println(etiqueta); // Debería imprimir 3
 		}
-		
+	}
+	
+	public static void procesarCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeIdInicial) {
 		//Secuecia de ejecucion critica
-		Map<Integer, Integer> sec = getCaminoCritico(mapeo, grafito, 0);
-		System.out.println(sec.keySet());
-		System.out.println("Complejidad método getCaminoCritico:  O(v) + O (a) => v = " + contadorVertices + "; a = " + contadorArcos);
+		Map<Integer, Integer> sec = getCaminoCritico(mapa, grafo, verticeIdInicial);
+		imprimirSecuenciaOrdenAscendente(sec);
+		System.out.println("Complejidad método getCaminoCritico:  O(v) + O (a) => v = " + 
+				contadorEjecucionPorVertice + "; a = " + contadorEjecucionPorArco);
 		
 	}
 	
-	/* Solución anterior era de complejidad O(n!) donde n es la cantidad de vertices 
-	 * En el peor de los casos ejecutaba n-1 * n-2 * n-3 * n-4 * n-5 * ... * n-(n-1)
-	 * veces las consultas a la estructura hashmap
-	 * 
+	/* 
 	 * Esta solución tiene un complejidad O(v) + O(a)
 	 * donde v es la cantidad de vértices y a es la cantidad de arcos
+	 * En el peor de los casos recorre todos los vértices una sola vez
+	 * y 
 	 */
-	public static Map<Integer, Integer> getCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
+	private static Map<Integer, Integer> getCaminoCritico(Map<Integer, Tarea> mapa, Grafo<Integer> grafo, int verticeId) {
 		Map<Integer, Integer> result = new LinkedHashMap<>();
 		Map<Integer, Integer> tmp;
 		
@@ -121,7 +131,7 @@ public class Main {
 		Iterator<Integer> itAdyacentesId = grafo.obtenerAdyacentes(verticeId);
 		
 		while(itAdyacentesId.hasNext()) {
-			contadorArcos++;
+			contadorEjecucionPorArco++;
 			
 			Integer adyacenteId = itAdyacentesId.next();
 			
@@ -147,32 +157,25 @@ public class Main {
 		
 		costos.put(idTarea, result);
 		
-		contadorVertices++;
+		contadorEjecucionPorVertice++;
 		
 		return result;
 	}
 
+	private static void imprimirSecuenciaOrdenAscendente(Map<Integer, Integer> mapa) {
+		List<Integer> tmp = new LinkedList<>();
+		Iterator<Integer> it = mapa.keySet().iterator();
+		while(it.hasNext()) {
+			tmp.add(it.next());
+		}
+		Collections.reverse(tmp);
+		System.out.println(tmp);
+	}
 	
 	/*
 	 * Testea los metodos del grafo
 	 */
-	public static void testGrafo(Grafo<Integer> grafo) {
-		final int MAX = 13;
-		
-		//Se carga el grafo
-		for(int i =0; i < MAX; i++) {
-			grafo.agregarVertice(i);
-		}
-		
-		for(int i = 0; i < MAX; i++) {
-			if(grafo.contieneVertice(i)) {
-				grafo.agregarArco(i, i + 2, 2*i);
-			}
-		}
-		
-		if(grafo.contieneVertice(MAX/2)) {
-			grafo.borrarVertice(MAX/2);
-		}
+	public static void procesarTestGrafo(Grafo<Integer> grafo) {
 		
 		if(grafo.contieneVertice(2)) {
 			grafo.borrarVertice(2);
@@ -185,5 +188,97 @@ public class Main {
 		grafo.cantidadArcos();
 		grafo.cantidadVertices();
 		
+	}
+	
+	public static void cargarDatosTestControlado(Set<Tarea> tareas, Map<Integer, Tarea> mapa, Grafo<Integer> grafo) {
+		final int DEFAULT = 0;
+		
+		//Horas de tareas
+		int[] valorTareas = {20, 80, 70, 55, 24, 10, 66, 32, 22, 14, 35, 99, 7, 5, 90, 88, 63, 74};
+		
+		//Se carga la colección con tareas
+		for(int i =0; i < valorTareas.length; i++) {
+			tareas.add(new Tarea(i, valorTareas[i]));
+		}
+		
+		//Agrego tareas al mapa y vertices al grafo
+		Iterator<Tarea> it = tareas.iterator();
+		while(it.hasNext()) {
+			Tarea tmpTarea = it.next();
+			mapa.put(tmpTarea.getId(), tmpTarea);
+			grafo.agregarVertice(tmpTarea.getId());
+		}
+		
+		// Genero los arcos entre vértices
+		int i = 0;
+		int idOrigen;
+		int idDestino;
+		String salida = null;
+		boolean ingresoValido = false;
+		boolean menu = false;
+		
+		System.out.println("Se inicia la secuencia de carga de arcos");
+		while(salida != "q") {
+			idOrigen = -1;
+			idOrigen = -1;
+			BufferedReader entrada = new BufferedReader(new InputStreamReader(System.in));
+			
+			ingresoValido = false;
+			
+			while(!ingresoValido && !menu) {
+				try {
+					System.out.println("Ingrese vertice de origen");
+					idOrigen = new Integer(entrada.readLine());
+					if(grafo.contieneVertice(idOrigen)) {
+						ingresoValido = true;
+					} else if(idOrigen == -2) {
+						menu = true;
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
+			
+			ingresoValido = false;
+			
+			while(!ingresoValido && !menu) {
+				try {
+					System.out.println("Ingrese vertice de destino");
+					idDestino = new Integer(entrada.readLine());
+					if(grafo.contieneVertice(idDestino)) {
+						grafo.agregarArco(idOrigen, idDestino, DEFAULT);
+						System.out.println(grafo.obtenerArco(idOrigen, idDestino));
+						ingresoValido = true;
+					} else if(idDestino == -2) {
+						menu = true;
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
+			
+			if(menu) {
+				try {
+					System.out.println("Menú: q = salir; arcos = print arcos");
+					salida = entrada.readLine();
+					if(salida.equals("arcos") ) {
+						printArcos(grafo);
+						menu = false;
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
+		}
+		
+		System.out.println("Finaliza la secuencia de carga de arcos");
+	}
+	
+	public static void printArcos(Grafo<Integer> grafo) {
+		Iterator<Arco<Integer>> it = grafo.obtenerArcos();
+		
+		while(it.hasNext()) {
+			System.out.println(it.next());
+		}
 	}
 }
