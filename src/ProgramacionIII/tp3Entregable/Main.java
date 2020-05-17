@@ -13,7 +13,7 @@ import java.util.Set;
 public class Main {
 	private static Map<Integer, Map<Integer, Integer>> costos;
 	
-	private static int INICIO = 0;
+	final static int INICIO = 0;
 	private static int contadorEjecucionPorVertice;
 	private static int contadorEjecucionPorArco;
 	
@@ -36,8 +36,9 @@ public class Main {
 		Map<Integer, Tarea> mapeoTest = new HashMap<>();
 		
 		cargarDatosTestControlado(tareasTest, mapeoTest, grafoTest);
-		grafoTest.cantidadVertices();
-		grafoTest.cantidadArcos();
+		
+		actualizarEtiquetasTest(grafoTest);
+		
 		//procesarTestGrafo(grafoTest);
 		
 		procesarCaminoCritico(mapeoTest, grafoTest,INICIO);
@@ -216,6 +217,33 @@ public class Main {
 		grafo.agregarArco(14, 15, 0);
 		grafo.agregarArco(15, 16, 0);
 		grafo.agregarArco(16, 17, 0);
+	}
+	
+	public static void actualizarEtiquetasTest(Grafo<Integer> grafo) {
+		/*
+		 * Genero los arcos entre vértices con etiquetas para mostrar cómo el algoritmo de caminoCritico
+		 * encuentra otro resultado por el impacto del valor de las etiquetas en la evaluacion
+		 */
+		
+		//Para reflejar el cembio en el valor de la etiqueta, primero se debe borrar el arco
+		//y luego agregar uno nuevo con la etiqueta respectiva
+		grafo.borrarArco(0, 5);
+		grafo.agregarArco(0, 5, 24);
+		
+		//Si no se borra primero, no se modifica el arco por más que intente agregar uno nuevo
+		grafo.agregarArco(4, 10, 15); 
+		
+		grafo.borrarArco(10, 12);
+		grafo.agregarArco(10, 12, 20);
+		
+		grafo.borrarArco(12, 17);
+		grafo.agregarArco(12, 17, 23);
+		
+		grafo.borrarArco(5, 7);
+		grafo.agregarArco(5, 7, 70);
+		
+		grafo.borrarArco(7, 4);
+		grafo.agregarArco(7, 4, 11);
 	}
 	
 	public static void printArcos(Grafo<Integer> grafo) {
