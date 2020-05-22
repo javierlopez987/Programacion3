@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
-	private static Integer W;
+public class Monedas {
+	private static Integer W; // variable que define el problema
 	private static Integer S; //S = variable que acumula y controla soluciones parciales
 	
 	public static void main(String[] args) {
@@ -31,13 +31,13 @@ public class Main {
 		
 		S = W; // Lo que la teoría conoce como "Solución inicial vacía"
 		
-		Collections.sort(C, Collections.reverseOrder()); //Ordenar lista para mejorar rendimiento
+		Collections.sort(C, Collections.reverseOrder()); //Ordena la lista de candidatos
 		
 		while(!C.isEmpty() && !solucion(S)) {
 			x = seleccionar(C);
 			C.remove(x);
 			
-			if(factible(x, S)) // es factible explicito
+			if(factible(x, S)) // isFactible explicito
 				agregar(x, solucion); // agregar candidato seleccionado a solución parcial
 		}
 		
@@ -54,48 +54,23 @@ public class Main {
 	}
 
 	private static void agregar(Integer x, Map<Integer, Integer> solucion) {
-
 		int aux = 0;
 		int veces = 1;
 		
 		if(x != 0)
 			veces = S/x; //cantidad de veces que entra el billete
 		
-		//S.add(aux);
-		
 		aux = veces * x;
 		
-		S -= aux; //Se agrega
+		S -= aux; // Se actualiza variable control
 		
-		solucion.put(x, veces);
+		solucion.put(x, veces); //Se agrega a conjunto solución
 		
-		/*
-		while (x <= P) {
-			//Integer tmp = new Integer(x);
-			S.add(x);
-			P -= x;
-		}
-		*/
 	}
 
 	private static int seleccionar(List<Integer> candidatos) {
 		int max = 0; // max => billete de mayor denominacion
-		/*
-		 * int aux = 0;
-		 */
 		
-		
-		// No recorrer candidatos si los llevo ordenados
-		/*
-		Iterator<Integer> it = candidatos.iterator();
-		
-		while(it.hasNext()) {
-			aux = it.next();
-			if(aux > max) {
-				max = aux;
-			}
-		}
-		*/
 		if(!candidatos.isEmpty()) {
 			max = candidatos.get(0);
 		}
@@ -105,15 +80,5 @@ public class Main {
 
 	private static boolean solucion(Integer S) {
 		return S == 0;
-		/*
-		int suma = 0;
-		Iterator<Integer> it = S.iterator();
-		
-		while(it.hasNext()) {
-			suma += it.next();
-		}
-		
-		return suma == W;
-		*/
 	}
 }
