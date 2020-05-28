@@ -31,7 +31,7 @@ public class CSVReader {
 		int id = Integer.valueOf(splitted[0]);
 		int members = Integer.valueOf(splitted[splitted.length-1]);
 		
-		int[] preferredDays = new int[5];
+		int[] preferredDays = new int[8];
 		for (int index = 1; index < splitted.length-1; index++) {
 			preferredDays[index-1] = Integer.valueOf(splitted[index]);
 		}
