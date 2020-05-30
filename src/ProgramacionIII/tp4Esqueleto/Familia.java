@@ -27,7 +27,7 @@ public class Familia {
 	}
 
 	
-	/* Dado un indice entre 0 y 4, retorna el día preferido por la familia para ese indice. */
+	/* Dado un indice entre 0 y 7, retorna el día preferido por la familia para ese indice. */
 	public int preferenciaEn(int indice) {
 		return this.diasPreferidos[indice];
 	}
@@ -37,7 +37,7 @@ public class Familia {
 		return preferenciaEn(0);
 	}
 	
-	/* Dado un dia pasado por parametro, indica el orden de ese dia en el top 5 de preferencias.
+	/* Dado un dia pasado por parametro, indica el orden de ese dia en el top 8 de preferencias.
 	Si el dia no forma parte de las preferencias del usuario, se retorna -1. */ 
 	public int indiceDePreferencia(int dia) {
 		for (int indice = 0; indice < diasPreferidos.length; indice++)
