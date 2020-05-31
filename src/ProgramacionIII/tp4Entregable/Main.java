@@ -13,6 +13,9 @@ public class Main {
 	private static int confirmados;
 	private static int valorBono;
 	private static Integer costoTotal;
+	private static int valoracionesMax;
+	private static int[][] matrizPreferencia;
+	private static int promedioMax;
 	
 	public static void main(String... args) {
 		
@@ -21,11 +24,16 @@ public class Main {
 		inscriptos = familias.size();
 		valorBono = 5;
 		costoTotal = 0;
+		valoracionesMax = 8;
+		
+		establecerMatrizPreferencia(valoracionesMax);
+		
+		promedioMax = matrizPreferencia[7][1];
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
-		System.out.println("Costo total en bonos: " + costoTotal);
 		
 		System.out.println(resultado);
+		System.out.println("Costo total en bonos: " + costoTotal);
 		
 	}
 	
@@ -40,7 +48,7 @@ public class Main {
 		while(!C.isEmpty() && !solucion(S)) {
 			
 			x = seleccionar(C); // devuelve numero de día elegido
-			f = C.remove(0); // borra la Familia en inidice 0, que fue el criterio para evaluar seleccion
+			f = C.remove(0); // Va borrando las familias para no repetir
 			
 			if(factible(x, S))
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
@@ -68,13 +76,21 @@ public class Main {
 		}
 	}
 
-	private static int establecerBono(int valoracion, int grupoFamiliar) {
+	private static int determinarValorBono(int valoracion, int grupoFamiliar) {
+		int totalBono = 0;
+		
+		totalBono = calcularBono(valoracion, grupoFamiliar);
+		costoTotal += totalBono;
+		
+		return totalBono;
+	}
+	
+	private static int calcularBono(int valoracion, int grupoFamiliar) {
 		int totalBono = 0;
 		
 		if(valoracion != 0) {
 			totalBono = (2 * grupoFamiliar + valoracion + valorBono) * valorBono;
 		}
-		costoTotal += totalBono;
 		
 		return totalBono;
 	}
@@ -104,7 +120,7 @@ public class Main {
 		tmp.add(f);
 		
 		S.put(dia, tmp); //Se agrega a conjunto solución
-		establecerBono(0, f.miembros());
+		determinarValorBono(f.indiceDePreferencia(dia), f.miembros());
 		
 		confirmados++;
 	}
@@ -114,10 +130,26 @@ public class Main {
 	 * en funcion de la cantidad de integrantes del grupo familiar
 	 */
 	private static int seleccionar(List<Familia> candidatos) {
-		Familia x = candidatos.get(0);
-		Integer i = 0;
+		Familia f = candidatos.get(0);
+		int i = valoracionesMax;
+		int bono = 0;
+		boolean confirmado = false;
 		
-		return x.preferenciaEn(i);
+		// Criterio Greedy
+		while(!confirmado) {
+			i--;
+			
+			bono = calcularBono(i, f.miembros());
+			
+			if(bono == 0) {
+				confirmado = true;
+				i++;
+			} else if (bono <= promedioMax) {
+				confirmado = true;
+			}
+		}
+		
+		return f.preferenciaEn(i);
 	}
 
 	/*
@@ -125,6 +157,20 @@ public class Main {
 	 */
 	private static boolean solucion(Map<Integer, List<Familia>> S) {
 		return confirmados == inscriptos;
+	}
+	
+	private static void establecerMatrizPreferencia(int valoracionMax) {
+		
+		// Supuesto de grupo familiar maximo
+		int gfMax = 4;
+		
+		matrizPreferencia = new int[valoracionMax][gfMax];
+		
+		for(int i = 0; i < valoracionMax; i++) {
+			for(int j = 0; j < gfMax; j++) {
+ 				matrizPreferencia[i][j] = calcularBono(i, j);				
+			}
+		}
 	}
 	
 }
