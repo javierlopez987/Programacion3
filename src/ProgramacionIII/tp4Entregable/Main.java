@@ -32,6 +32,7 @@ public class Main {
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
+		//imprimirSolucion(resultado);
 		System.out.println(resultado);
 		System.out.println("Costo total en bonos: " + costoTotal);
 		
@@ -53,8 +54,6 @@ public class Main {
 			if(factible(x, S))
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
 		}
-		
-		imprimirSolucion(S);
 		
 		if(solucion(S)) {
 			return S;
