@@ -14,6 +14,9 @@ public class Main {
 	private static int valorBono;
 	private static Integer costoTotal;
 	private static int valoracionesMax;
+	private static int cantDias;
+	private static List<Integer> demandaDiaPreferido;
+	private static int promedioMax;
 	
 	public static void main(String... args) {
 		
@@ -25,6 +28,9 @@ public class Main {
 		valorBono = 5;
 		costoTotal = 0;
 		valoracionesMax = 8;
+		cantDias = 100;
+		promedioMax = calcularBono(2, 3);
+		demandaDiaPreferido = new ArrayList<Integer>();
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
@@ -42,7 +48,7 @@ public class Main {
 		Familia f;
 		int x;
 		
-		while(!C.isEmpty() && !solucion(S)) {
+		while(!C.isEmpty() && !solucion()) {
 			
 			x = seleccionar(C); // devuelve numero de día elegido
 			f = C.remove(0); // Va borrando las familias para no repetir
@@ -51,7 +57,7 @@ public class Main {
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
 		}
 		
-		if(solucion(S)) {
+		if(solucion()) {
 			return S;
 		} else {
 			return null;
@@ -100,7 +106,7 @@ public class Main {
 			tmp = new LinkedList<Familia>();
 		}
 		
-		return tmp.size() < MAXDISPONIBILIDAD;
+		return tmp.size() < disponibilidadMax;
 	}
 
 	/*
@@ -115,7 +121,7 @@ public class Main {
 		tmp.add(f);
 		
 		S.put(dia, tmp); //Se agrega a conjunto solución
-		determinarValorBono(f.indiceDePreferencia(dia), f.miembros());
+		determinarValorBono(f.indiceDePreferencia(dia), f.miembros()); // incorpora al costo total
 		
 		confirmados++;
 	}
@@ -126,12 +132,16 @@ public class Main {
 	 */
 	private static int seleccionar(List<Familia> candidatos) {
 		Familia f = candidatos.get(0);
-		int i = valoracionesMax;
+		int valoraciones = valoracionesMax/2;
+		int i = valoraciones;
 		int bono = 0;
 		boolean confirmado = false;
 		
+		if(demandaDiaPreferido.constains)
+		demandaDiaPreferido[f.getId()] = f.diaPreferido();
+		
 		// Criterio Greedy
-		while(!confirmado) {
+		while(!confirmado && i >= 0) {
 			i--;
 			
 			bono = calcularBono(i, f.miembros());
@@ -150,22 +160,8 @@ public class Main {
 	/*
 	 * Establece como solucion si todos los inscriptos fueron asignados a un dia
 	 */
-	private static boolean solucion(Map<Integer, List<Familia>> S) {
+	private static boolean solucion() {
 		return confirmados == inscriptos;
-	}
-	
-	private static void establecerMatrizPreferencia(int valoracionMax) {
-		
-		// Supuesto de grupo familiar maximo
-		int gfMax = 4;
-		
-		matrizPreferencia = new int[valoracionMax][gfMax];
-		
-		for(int i = 0; i < valoracionMax; i++) {
-			for(int j = 0; j < gfMax; j++) {
- 				matrizPreferencia[i][j] = calcularBono(i, j);				
-			}
-		}
 	}
 	
 }
