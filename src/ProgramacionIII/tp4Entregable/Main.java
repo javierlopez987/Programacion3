@@ -15,7 +15,7 @@ public class Main {
 	private static Integer costoTotal;
 	private static int valoracionesMax;
 	private static int cantDias;
-	private static List<Integer> demandaDiaPreferido;
+	private static Map<Integer, Integer> demandaDiaPreferido;
 	private static int promedioMax;
 	
 	public static void main(String... args) {
@@ -30,7 +30,7 @@ public class Main {
 		valoracionesMax = 8;
 		cantDias = 100;
 		promedioMax = calcularBono(2, 3);
-		demandaDiaPreferido = new ArrayList<Integer>();
+		demandaDiaPreferido = new HashMap<Integer, Integer>();
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
@@ -137,8 +137,13 @@ public class Main {
 		int bono = 0;
 		boolean confirmado = false;
 		
-		if(demandaDiaPreferido.constains)
-		demandaDiaPreferido[f.getId()] = f.diaPreferido();
+		if(!demandaDiaPreferido.containsKey(f.diaPreferido())) {
+			demandaDiaPreferido.put(f.diaPreferido(), 1);
+		} else {
+			int j = demandaDiaPreferido.get(f.diaPreferido());
+			j++;
+			demandaDiaPreferido.put(f.diaPreferido(), j);
+		}
 		
 		// Criterio Greedy
 		while(!confirmado && i >= 0) {
