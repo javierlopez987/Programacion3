@@ -8,27 +8,23 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-	final static int MAXDISPONIBILIDAD = 340;
 	private static int inscriptos;
+	private static int disponibilidadMax;
 	private static int confirmados;
 	private static int valorBono;
 	private static Integer costoTotal;
 	private static int valoracionesMax;
-	private static int[][] matrizPreferencia;
-	private static int promedioMax;
 	
 	public static void main(String... args) {
 		
 		CSVReader reader = new CSVReader("./data/familias.csv");
 		ArrayList<Familia> familias = reader.read();
+		
 		inscriptos = familias.size();
+		disponibilidadMax = 340;
 		valorBono = 5;
 		costoTotal = 0;
 		valoracionesMax = 8;
-		
-		establecerMatrizPreferencia(valoracionesMax);
-		
-		promedioMax = matrizPreferencia[7][1];
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
