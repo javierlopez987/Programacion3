@@ -47,7 +47,7 @@ public class Main {
 		Familia f;
 		int x;
 		
-		ComparadorFamilia comparador = new ComparadorMiembros();
+		ComparadorFamilia comparador = new ComparadorMiembros(); 
 		
 		Collections.sort(C, comparador.reversed());
 		
@@ -156,7 +156,6 @@ public class Main {
 			
 			if(bono == 0) {
 				confirmado = true;
-				i++;
 			} else if (bono <= promedioMax) {
 				confirmado = true;
 			}
