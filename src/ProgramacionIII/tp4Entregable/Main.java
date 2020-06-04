@@ -1,6 +1,7 @@
 package ProgramacionIII.tp4Entregable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -48,6 +49,10 @@ public class Main {
 		Familia f;
 		int x;
 		
+		ComparadorFamilia comparador = new ComparadorMiembros();
+		
+		Collections.sort(C, comparador.reversed());
+		
 		while(!C.isEmpty() && !solucion()) {
 			
 			x = seleccionar(C); // devuelve numero de día elegido
@@ -56,6 +61,8 @@ public class Main {
 			if(factible(x, S))
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
 		}
+		
+		imprimirSolucion(S);
 		
 		if(solucion()) {
 			return S;
@@ -73,7 +80,7 @@ public class Main {
 		Iterator<List<Familia>> it = S.values().iterator();
 		
 		while(it.hasNext() && itKey.hasNext()) {
-			System.out.println(itKey.next() + "; " + it.next().size());
+			System.out.print(itKey.next() + "; " + it.next().size() + " - ");
 		}
 	}
 
@@ -101,12 +108,18 @@ public class Main {
 	 */
 	private static boolean factible(Integer x, Map<Integer, List<Familia>> S) {
 		List<Familia> tmp = S.get(x);
+		int ocupacion = 0;
 		
 		if(tmp == null) {
 			tmp = new LinkedList<Familia>();
 		}
 		
-		return tmp.size() < disponibilidadMax;
+		Iterator<Familia> it = tmp.iterator();
+		while(it.hasNext()) {
+			ocupacion += it.next().miembros();
+		}
+		
+		return ocupacion < disponibilidadMax;
 	}
 
 	/*
