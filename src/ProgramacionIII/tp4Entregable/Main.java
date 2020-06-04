@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Main {
 	private static int inscriptos;
@@ -60,7 +61,8 @@ public class Main {
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
 		}
 		
-		imprimirSolucion(S);
+		imprimirFamilias(S);
+		//imprimirPersonas(S);
 		
 		if(solucion()) {
 			return S;
@@ -71,17 +73,17 @@ public class Main {
 	}
 	
 	/*
-	 * Imprime solucion
+	 * Imprime cantidad de familias por día
 	 */
-	private static void imprimirSolucion(Map<Integer, List<Familia>> S) {
-		Iterator<Integer> itKey = S.keySet().iterator();
-		Iterator<List<Familia>> it = S.values().iterator();
+	private static void imprimirFamilias(Map<Integer, List<Familia>> S) {
+		Iterator<Entry<Integer, List<Familia>>> it = S.entrySet().iterator();
 		
-		while(it.hasNext() && itKey.hasNext()) {
-			System.out.print(itKey.next() + "; " + it.next().size() + " - ");
+		while(it.hasNext()) {
+			Entry<Integer, List<Familia>> e = it.next();
+			System.out.print(e.getKey() + "; " + e.getValue().size() + " - ");
 		}
 	}
-
+	
 	private static int determinarValorBono(int valoracion, int grupoFamiliar) {
 		int totalBono = 0;
 		
