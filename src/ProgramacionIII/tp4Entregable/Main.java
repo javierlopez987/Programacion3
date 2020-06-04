@@ -58,7 +58,7 @@ public class Main {
 		 */
 		valorMax = calcularBono(2, 3);
 		ComparadorFamilia comparador = new ComparadorMiembros(); 
-		Collections.sort(C, comparador);
+		Collections.sort(C, comparador.reversed());
 		
 		while(!C.isEmpty() && !solucion()) {
 			
