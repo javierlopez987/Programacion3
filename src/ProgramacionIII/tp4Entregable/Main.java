@@ -50,19 +50,22 @@ public class Main {
 		
 		ComparadorFamilia comparador = new ComparadorMiembros(); 
 		
-		Collections.sort(C, comparador.reversed());
+		//Collections.sort(C, comparador.reversed());
 		
 		while(!C.isEmpty() && !solucion()) {
 			
 			x = seleccionar(C); // devuelve numero de día elegido
 			f = C.remove(0); // Va borrando las familias para no repetir
 			
-			if(factible(x, S))
+			if(factible(x, f, S))
 				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
 		}
 		
+		System.out.println("\nAgenda según cantidad de familias");
 		imprimirFamilias(S);
-		//imprimirPersonas(S);
+		System.out.println("\nAgenda según cantidad de personas");
+		imprimirPersonas(S);
+		System.out.println();
 		
 		if(solucion()) {
 			return S;
@@ -77,11 +80,36 @@ public class Main {
 	 */
 	private static void imprimirFamilias(Map<Integer, List<Familia>> S) {
 		Iterator<Entry<Integer, List<Familia>>> it = S.entrySet().iterator();
+		int totalFamilias = 0;
 		
 		while(it.hasNext()) {
 			Entry<Integer, List<Familia>> e = it.next();
-			System.out.print(e.getKey() + "; " + e.getValue().size() + " - ");
+			int familiasPorDia = e.getValue().size();
+			
+			System.out.print(e.getKey() + "; " + familiasPorDia + " - ");
+			totalFamilias += familiasPorDia;
 		}
+		
+		System.out.println("\nTotal familias: " + totalFamilias);
+	}
+	
+	private static void imprimirPersonas(Map<Integer, List<Familia>> S) {
+		Iterator<Entry<Integer, List<Familia>>> it = S.entrySet().iterator();
+		int totalPersonas = 0;
+		
+		while(it.hasNext()) {
+			Entry<Integer, List<Familia>> e = it.next();
+			int sumaPersonas = 0;
+			Iterator<Familia> itFam = e.getValue().iterator();
+			
+			while(itFam.hasNext()) {
+				sumaPersonas += itFam.next().miembros();
+			}
+			totalPersonas += sumaPersonas;
+			System.out.print(e.getKey() + "; " + sumaPersonas + " - ");
+		}
+		
+		System.out.println("\nTotal personas: " + totalPersonas);
 	}
 	
 	private static int determinarValorBono(int valoracion, int grupoFamiliar) {
@@ -106,7 +134,7 @@ public class Main {
 	/*
 	 * Es factible si hay lugar disponible ese dia
 	 */
-	private static boolean factible(Integer x, Map<Integer, List<Familia>> S) {
+	private static boolean factible(Integer x, Familia f, Map<Integer, List<Familia>> S) {
 		List<Familia> tmp = S.get(x);
 		int ocupacion = 0;
 		
@@ -119,7 +147,7 @@ public class Main {
 			ocupacion += it.next().miembros();
 		}
 		
-		return ocupacion < disponibilidadMax;
+		return ocupacion + f.miembros() < disponibilidadMax;
 	}
 
 	/*
