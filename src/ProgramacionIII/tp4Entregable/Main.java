@@ -17,20 +17,25 @@ public class Main {
 	private static Integer costoTotal;
 	private static int valoracionesMax;
 	private static int cantDias;
-	private static int promedioMax;
+	private static int valorMax;
 	
 	public static void main(String... args) {
 		
+		/*
+		 * Dataset
+		 */
 		CSVReader reader = new CSVReader("./data/familias.csv");
 		ArrayList<Familia> familias = reader.read();
 		
+		/*
+		 * Parámetros iniciales
+		 */
 		inscriptos = familias.size();
 		disponibilidadMax = 340;
 		valorBono = 5;
 		costoTotal = 0;
 		valoracionesMax = 8;
 		cantDias = 100;
-		promedioMax = calcularBono(2, 3);
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
@@ -48,9 +53,12 @@ public class Main {
 		Familia f;
 		int x;
 		
+		/*
+		 * Parámetros para selección
+		 */
+		valorMax = calcularBono(2, 3);
 		ComparadorFamilia comparador = new ComparadorMiembros(); 
-		
-		//Collections.sort(C, comparador.reversed());
+		Collections.sort(C, comparador);
 		
 		while(!C.isEmpty() && !solucion()) {
 			
@@ -173,8 +181,8 @@ public class Main {
 	 */
 	private static int seleccionar(List<Familia> candidatos) {
 		Familia f = candidatos.get(0);
-		int valoraciones = valoracionesMax/2;
-		int i = valoraciones;
+		int valoracionesAconsiderar = valoracionesMax/2;
+		int i = valoracionesAconsiderar;
 		int bono = 0;
 		boolean confirmado = false;
 		
@@ -186,7 +194,7 @@ public class Main {
 			
 			if(bono == 0) {
 				confirmado = true;
-			} else if (bono <= promedioMax) {
+			} else if (bono <= valorMax) {
 				confirmado = true;
 			}
 		}
