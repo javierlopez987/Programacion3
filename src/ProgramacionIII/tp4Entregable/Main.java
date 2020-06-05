@@ -67,7 +67,7 @@ public class Main {
 		
 		while(!C.isEmpty() && !solucion()) {
 			
-			x = seleccionar(C); // devuelve numero de día elegido
+			x = seleccionar(C, S); // devuelve numero de día elegido
 			f = C.remove(0); // Va borrando las familias para no repetir
 			
 			if(factible(x, f, S))
@@ -223,7 +223,7 @@ public class Main {
 	 * Devuelve número de día elegido
 	 * en funcion de la cantidad de integrantes del grupo familiar
 	 */
-	private static int seleccionar(List<Familia> candidatos) {
+	private static int seleccionar(List<Familia> candidatos, Map<Integer, List<Familia>> S) {
 		Familia f = candidatos.get(0);
 		int valoracionesConsideradas = valoracionesMax;
 		int i = valoracionesMax - valoracionesConsideradas;
@@ -231,8 +231,16 @@ public class Main {
 		boolean confirmado = false;
 		
 		// Criterio Greedy
-		while(i < valoracionesMax) {
-			
+		while(i < valoracionesMax && !confirmado) {
+			if(factible(f.preferenciaEn(i), f, S)) {
+				confirmado = true;
+			} else {
+				i++;
+			}
+		}
+		
+		if(!confirmado) {
+			i--;
 		}
 		
 		return f.preferenciaEn(i);
