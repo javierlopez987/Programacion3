@@ -2,6 +2,7 @@ package ProgramacionIII.tp4Entregable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +19,8 @@ public class Main {
 	private static int valoracionesMax;
 	private static int cantDias;
 	private static int valorMax;
+	private static double[][] frecuenciaDias;
+	private static Map<Integer, Integer> frecuenciaFamilias;
 	
 	public static void main(String... args) {
 		
@@ -36,6 +39,8 @@ public class Main {
 		costoTotal = 0;
 		valoracionesMax = 8;
 		cantDias = 100;
+		frecuenciaFamilias = new HashMap<Integer, Integer>();
+		frecuenciaDias = new double [cantDias][valoracionesMax];
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
@@ -53,12 +58,12 @@ public class Main {
 		Familia f;
 		int x;
 		
-		/*
-		 * Parámetros para selección
-		 */
-		valorMax = calcularBono(6, 2);
-		ComparadorFamilia comparador = new ComparadorMiembros(); 
-		Collections.sort(C, comparador.reversed());
+		calcularFrecuencia(C);
+		
+		ComparadorFamilia comp = new ComparadorMiembros();
+		Collections.sort(C, comp.reversed());
+		
+		
 		
 		while(!C.isEmpty() && !solucion()) {
 			
@@ -83,6 +88,45 @@ public class Main {
 		
 	}
 	
+	private static Map<Integer, Double> calcularFrecuencia(List<Familia> c) {
+		Map<Integer, Double> indiceFamilias = new HashMap<Integer, Double>();
+		Map<Integer, Double> sumaFamilias = new HashMap<Integer, Double>();
+		Map<Integer, Double> frecuenciaFamilia = new HashMap<Integer, Double>();
+		double aux = 0;
+		double sumaFamilia = 0;
+		double indiceGrupoFamiliar = 0;
+		double[][] ni = new double[cantDias][valoracionesMax];
+		
+		Iterator<Familia> it = c.iterator();
+		
+		while(it.hasNext()) {
+			Familia f = it.next();
+			for(int i = 0; i < valoracionesMax; i++) {
+				aux = ni[f.preferenciaEn(i) - 1][i];
+				aux++;
+				ni[f.preferenciaEn(i) - 1][i] = aux;
+				frecuenciaDias[f.preferenciaEn(i) - 1][i] = (ni[f.preferenciaEn(i) - 1][i])/inscriptos;
+			}
+			if(sumaFamilias.containsKey(f.miembros())) {
+				sumaFamilia = sumaFamilias.get(f.miembros());
+				sumaFamilia++;
+				sumaFamilias.put(f.miembros(), sumaFamilia);
+			} else {
+				sumaFamilia = 1;
+				sumaFamilias.put(f.miembros(), sumaFamilia);
+			}
+			
+			frecuenciaFamilia.put(f.miembros(), sumaFamilias.get(f.miembros())/inscriptos); 
+			
+			indiceGrupoFamiliar = frecuenciaFamilia.get(f.miembros()) * Math.pow(2, f.miembros());
+			
+			indiceFamilias.put(f.getId(), indiceGrupoFamiliar);
+		}
+		
+		return indiceFamilias;
+		
+	}
+
 	/*
 	 * Imprime cantidad de familias por día
 	 */
@@ -182,21 +226,13 @@ public class Main {
 	private static int seleccionar(List<Familia> candidatos) {
 		Familia f = candidatos.get(0);
 		int valoracionesConsideradas = valoracionesMax;
-		int i = valoracionesConsideradas;
+		int i = valoracionesMax - valoracionesConsideradas;
 		int bono = 0;
 		boolean confirmado = false;
 		
 		// Criterio Greedy
-		while(!confirmado && i >= 0) {
-			i--;
+		while(i < valoracionesMax) {
 			
-			bono = calcularBono(i, f.miembros());
-			
-			if(bono == 0) {
-				confirmado = true;
-			} else if (bono <= valorMax) {
-				confirmado = true;
-			}
 		}
 		
 		return f.preferenciaEn(i);
