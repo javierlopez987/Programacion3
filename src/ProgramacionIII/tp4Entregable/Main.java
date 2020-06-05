@@ -56,7 +56,7 @@ public class Main {
 		/*
 		 * Parámetros para selección
 		 */
-		valorMax = calcularBono(2, 3);
+		valorMax = calcularBono(6, 2);
 		ComparadorFamilia comparador = new ComparadorMiembros(); 
 		Collections.sort(C, comparador.reversed());
 		
@@ -181,8 +181,8 @@ public class Main {
 	 */
 	private static int seleccionar(List<Familia> candidatos) {
 		Familia f = candidatos.get(0);
-		int valoracionesAconsiderar = valoracionesMax/2;
-		int i = valoracionesAconsiderar;
+		int valoracionesConsideradas = valoracionesMax;
+		int i = valoracionesConsideradas;
 		int bono = 0;
 		boolean confirmado = false;
 		
