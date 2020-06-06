@@ -63,11 +63,11 @@ public class Main {
 		 *  Ordenamiento previo a la selección greedy
 		 */
 		Comparator<Familia> compMiembros = new ComparadorMiembros();
-		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
 		Comparator<Familia> compFrecDia = new ComparadorIndiceDias(frecuenciaDias);
+		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
 		
-		Collections.sort(C, compMiembros);
-		//Collections.sort(C, compDia.reversed());
+		//Collections.sort(C, compMiembros);
+		Collections.sort(C, compFrecDia.reversed());
 		//Collections.sort(C, compFrecFam.reversed());
 		
 		System.out.println(C);
