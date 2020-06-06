@@ -67,8 +67,8 @@ public class Main {
 		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
 		
 		//Collections.sort(C, compMiembros);
-		Collections.sort(C, compFrecDia.reversed());
-		//Collections.sort(C, compFrecFam.reversed());
+		//Collections.sort(C, compFrecDia.reversed());
+		Collections.sort(C, compFrecFam.reversed());
 		
 		System.out.println(C);
 		
