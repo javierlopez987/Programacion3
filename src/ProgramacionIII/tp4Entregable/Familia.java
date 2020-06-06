@@ -1,6 +1,7 @@
 package ProgramacionIII.tp4Entregable;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /* Una familia, con su cantidad de dias, y una arreglo con el top de 4 dias preferidos */
 public class Familia {
@@ -13,6 +14,22 @@ public class Familia {
 		this.id = id;
 		this.miembros = miembros;
 		this.diasPreferidos = diasPreferidos;
+	}
+	
+	public double frecuenciaAcum(double[][] matrizPreferencia) {
+		double suma = 0;
+		int i = 0;
+		
+		while(i < diasPreferidos.length) {
+			suma += matrizPreferencia[this.preferenciaEn(i) -1][i];
+			i++;
+		}
+		
+		return suma;
+	}
+	
+	public double indiceGrupoFamiliar(Map<Integer, Double> registro) {
+		return registro.get(this.miembros);
 	}
 
 	/* Id de la familia */

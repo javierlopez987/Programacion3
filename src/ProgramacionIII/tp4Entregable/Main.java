@@ -18,9 +18,7 @@ public class Main {
 	private static Integer costoTotal;
 	private static int valoracionesMax;
 	private static int cantDias;
-	private static int valorMax;
 	private static double[][] frecuenciaDias;
-	private static Map<Integer, Integer> frecuenciaFamilias;
 	
 	public static void main(String... args) {
 		
@@ -39,12 +37,11 @@ public class Main {
 		costoTotal = 0;
 		valoracionesMax = 8;
 		cantDias = 100;
-		frecuenciaFamilias = new HashMap<Integer, Integer>();
 		frecuenciaDias = new double [cantDias][valoracionesMax];
+		
 		
 		Map<Integer, List<Familia>> resultado = greedy(familias);
 		
-		//imprimirSolucion(resultado);
 		System.out.println(resultado);
 		System.out.println("Costo total en bonos: " + costoTotal);
 		
@@ -55,23 +52,33 @@ public class Main {
 	 */
 	public static Map<Integer, List<Familia>> greedy(List<Familia> C) {
 		Map<Integer, List<Familia>> S = new HashMap<>(); // Solución inicial vacía
+		Map<Integer, Double> indiceFamilias;
 		Familia f;
 		int x;
 		
-		calcularFrecuencia(C);
-		
-		ComparadorFamilia comp = new ComparadorMiembros();
-		Collections.sort(C, comp.reversed());
+		indiceFamilias = calcularFrecuencia(C);
 		
 		
+		/*
+		 *  Ordenamiento previo a la selección greedy
+		 */
+		Comparator<Familia> compMiembros = new ComparadorMiembros();
+		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
+		Comparator<Familia> compFrecDia = new ComparadorIndiceDias(frecuenciaDias);
+		
+		Collections.sort(C, compMiembros);
+		//Collections.sort(C, compDia.reversed());
+		//Collections.sort(C, compFrecFam.reversed());
+		
+		System.out.println(C);
 		
 		while(!C.isEmpty() && !solucion()) {
 			
-			x = seleccionar(C, S); // devuelve numero de día elegido
-			f = C.remove(0); // Va borrando las familias para no repetir
+			x = seleccionar(C, S); 
+			f = C.remove(0);
 			
 			if(factible(x, f, S))
-				agregar(x, f, S); // agregar candidato seleccionado a solución parcial
+				agregar(x, f, S);
 		}
 		
 		System.out.println("\nAgenda según cantidad de familias");
@@ -89,23 +96,19 @@ public class Main {
 	}
 	
 	private static Map<Integer, Double> calcularFrecuencia(List<Familia> c) {
-		Map<Integer, Double> indiceFamilias = new HashMap<Integer, Double>();
 		Map<Integer, Double> sumaFamilias = new HashMap<Integer, Double>();
 		Map<Integer, Double> frecuenciaFamilia = new HashMap<Integer, Double>();
 		double aux = 0;
 		double sumaFamilia = 0;
-		double indiceGrupoFamiliar = 0;
-		double[][] ni = new double[cantDias][valoracionesMax];
 		
 		Iterator<Familia> it = c.iterator();
 		
 		while(it.hasNext()) {
 			Familia f = it.next();
 			for(int i = 0; i < valoracionesMax; i++) {
-				aux = ni[f.preferenciaEn(i) - 1][i];
-				aux++;
-				ni[f.preferenciaEn(i) - 1][i] = aux;
-				frecuenciaDias[f.preferenciaEn(i) - 1][i] = (ni[f.preferenciaEn(i) - 1][i])/inscriptos;
+				aux = frecuenciaDias[f.preferenciaEn(i) - 1][i];
+				aux = (aux * inscriptos + 1) / inscriptos;
+				frecuenciaDias[f.preferenciaEn(i) - 1][i] = aux;
 			}
 			if(sumaFamilias.containsKey(f.miembros())) {
 				sumaFamilia = sumaFamilias.get(f.miembros());
@@ -118,12 +121,9 @@ public class Main {
 			
 			frecuenciaFamilia.put(f.miembros(), sumaFamilias.get(f.miembros())/inscriptos); 
 			
-			indiceGrupoFamiliar = frecuenciaFamilia.get(f.miembros()) * Math.pow(2, f.miembros());
-			
-			indiceFamilias.put(f.getId(), indiceGrupoFamiliar);
 		}
 		
-		return indiceFamilias;
+		return frecuenciaFamilia;
 		
 	}
 
@@ -227,7 +227,6 @@ public class Main {
 		Familia f = candidatos.get(0);
 		int valoracionesConsideradas = valoracionesMax;
 		int i = valoracionesMax - valoracionesConsideradas;
-		int bono = 0;
 		boolean confirmado = false;
 		
 		// Criterio Greedy
