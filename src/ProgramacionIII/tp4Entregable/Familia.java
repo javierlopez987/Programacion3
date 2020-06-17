@@ -1,19 +1,30 @@
 package ProgramacionIII.tp4Entregable;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /* Una familia, con su cantidad de dias, y una arreglo con el top de 4 dias preferidos */
-public class Familia {
+public class Familia implements Iterable<Integer>{
 
 	private int id;
 	private int miembros;
 	private int[] diasPreferidos;
+	private int diaReservado;
 	
 	public Familia(int id, int miembros, int... diasPreferidos) {
 		this.id = id;
 		this.miembros = miembros;
 		this.diasPreferidos = diasPreferidos;
+		this.diaReservado = -1;
+	}
+	
+	public void setDiaReservado(int dia) {
+		if(indiceDePreferencia(dia) != -1) {
+			this.diaReservado = dia;
+		}
 	}
 	
 	public double frecuenciaAcum(double[][] matrizPreferencia) {
@@ -66,6 +77,17 @@ public class Familia {
 	@Override
 	public String toString() {
 		return "Familia: id=" + id + ", miembros=" + miembros + ", preferencias=" + Arrays.toString(diasPreferidos);
+	}
+
+	@Override
+	public Iterator<Integer> iterator() {
+		List<Integer> preferencias = new LinkedList<Integer>();
+		
+		for (int i = 0; i < diasPreferidos.length; i++) {
+			preferencias.add(diasPreferidos[i]);
+		}
+		
+		return preferencias.iterator();
 	}
 
 }
