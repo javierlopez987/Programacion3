@@ -21,6 +21,7 @@ public class Sala implements Iterable<Familia>{
 		if(factible(f)) {
 			this.reservas.add(f);
 			this.ocupacion += f.miembros();
+			f.setDiaReservado(dia);
 		}
 	}
 	

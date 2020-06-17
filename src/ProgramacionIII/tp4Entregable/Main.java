@@ -59,6 +59,7 @@ public class Main {
 		  System.out.println(resultado); 
 		  System.out.println("Costo total en bonos: " + costoTotal);
 		  imprimirOcupacion(resultado);
+		  imprimirPreferencias(resultado);
 		
 	}
 	
@@ -143,10 +144,6 @@ public class Main {
 		
 	}
 
-	/*
-	 * Imprime cantidad de familias por día
-	 */
-	
 	private static void imprimirOcupacion(Map<Integer, Sala> S) {
 		Iterator<Sala> it = S.values().iterator();
 		int totalPersonas = 0;		
@@ -157,6 +154,22 @@ public class Main {
 		}
 		
 		System.out.println("\nTotal familias: " + totalPersonas);
+	}
+	
+	private static void imprimirPreferencias(Map<Integer, Sala> S) {
+		Iterator<Sala> it = S.values().iterator();
+		while(it.hasNext()) {
+			Sala sala = it.next();
+			int reservado = sala.getDia();
+			Iterator<Familia> itFam = sala.iterator();
+			while(itFam.hasNext()) {
+				Familia f = itFam.next();
+				System.out.print(reservado + " - " +
+						f.getId() + " - " +
+						f.miembros() + " - " +
+						f.indiceDePreferencia(reservado) + "; ");
+			}
+		}
 	}
 	
 	

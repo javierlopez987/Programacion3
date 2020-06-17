@@ -27,6 +27,10 @@ public class Familia implements Iterable<Integer>{
 		}
 	}
 	
+	public int getDiaReservado() {
+		return this.diaReservado;
+	}
+	
 	public double frecuenciaAcum(double[][] matrizPreferencia) {
 		double suma = 0;
 		int i = 0;
