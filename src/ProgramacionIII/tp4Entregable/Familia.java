@@ -31,6 +31,36 @@ public class Familia implements Iterable<Integer>{
 		return this.diaReservado;
 	}
 	
+	public int getNextDia() {
+		int nextDia = -1;
+		int indexReserva = indiceDePreferencia(diaReservado);
+		indexReserva++;
+		if(preferenciaEn(indexReserva) != -1) {
+			nextDia = preferenciaEn(indexReserva);
+		}
+		
+		return nextDia;
+	}
+	
+	public int getDiaMenosDemanda(double[][] matrizPreferencia) {
+		int indexDia = 0;
+		double min = 0;
+		
+		int i = 0;
+		
+		while(i < diasPreferidos.length) {
+			
+			double indiceDemanda = matrizPreferencia[this.preferenciaEn(i) -1][i];
+			if(indiceDemanda < min) {
+				min = indiceDemanda;
+				indexDia = i;
+			}
+			i++;
+		}
+		
+		return diasPreferidos[indexDia];
+	}
+	
 	public double frecuenciaAcum(double[][] matrizPreferencia) {
 		double suma = 0;
 		int i = 0;
@@ -61,7 +91,12 @@ public class Familia implements Iterable<Integer>{
 	
 	/* Dado un indice entre 0 y 7, retorna el día preferido por la familia para ese indice. */
 	public int preferenciaEn(int indice) {
-		return this.diasPreferidos[indice];
+		int diaPref = -1;
+		if(indice < diasPreferidos.length) {
+			diaPref = this.diasPreferidos[indice];
+		}
+		
+		return diaPref;
 	}
 	
 	/* Retorna el día preferido de la familia */

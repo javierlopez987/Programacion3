@@ -25,6 +25,14 @@ public class Sala implements Iterable<Familia>{
 		}
 	}
 	
+	public void removeReserva(Familia f) {
+		if(reservas.contains(f)) {
+			this.ocupacion -= f.miembros();
+			f.setDiaReservado(-1);
+			this.reservas.remove(f);
+		}
+	}
+	
 	public boolean factible(Familia f) {
 		return getDisponibilidad() >= f.miembros();
 	}
@@ -55,5 +63,7 @@ public class Sala implements Iterable<Familia>{
 		return reservas.toString();
 	}
 	
-	
+	public void permutarReservas(Familia f1, Familia f2) {
+		
+	}
 }

@@ -47,43 +47,45 @@ public class Main {
 		frecuenciaDias = new double [cantDias][valoracionesMax];
 		indiceFamilias = new HashMap<Integer, Double>();
 		reservas = new HashMap<Integer, Sala>();
+
+		/*
+		 * Ordenamiento
+		 */
+		indiceFamilias = calcularFrecuencia(familias);
+		Comparator<Familia> compMiembros = new ComparadorMiembros();
+		Comparator<Familia> compFrecDia = new ComparadorIndiceDias(frecuenciaDias);
+		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
 		
+		/*
+		 * Ejecución del greedy
+		 */
+		Map<Integer, Sala> resultado = greedy(familias, compMiembros);
 		
+		/*
+		 * Proceso de mejora
+		 */
+		resultado = mejora(3);
 		
-		  Map<Integer, Sala> resultado = greedy(familias);
-		  
-		  //resultado = mejora(resultado, 2); 
-		  
-		  calcularBonoTotal(resultado);
-		  
-		  System.out.println(resultado); 
-		  System.out.println("Costo total en bonos: " + costoTotal);
-		  imprimirOcupacion(resultado);
-		  imprimirPreferencias(resultado);
+		/*
+		 * Precesa y muestra información del resultado
+		 */
+		calcularBonoTotal(resultado);
+		System.out.println(resultado); 
+		System.out.println("Costo total en bonos: " + costoTotal);
+		imprimirOcupacion(resultado);
+		//imprimirPreferencias(resultado);
 		
 	}
 	
 	/*
 	 * Funcion greddy
 	 */
-	public static Map<Integer, Sala> greedy(List<Familia> C) {
+	public static Map<Integer, Sala> greedy(List<Familia> C, Comparator<Familia> comp) {
 		Map<Integer, Sala> S = reservas; // Solución inicial vacía
 		Familia f;
 		int x;
 		
-		indiceFamilias = calcularFrecuencia(C);
-		
-		/*
-		 *  Ordenamiento previo a la selección greedy
-		 */
-		Comparator<Familia> compMiembros = new ComparadorMiembros();
-		Comparator<Familia> compFrecDia = new ComparadorIndiceDias(frecuenciaDias);
-		Comparator<Familia> compFrecFam = new ComparadorIndice(indiceFamilias);
-		
-		//Collections.sort(C, compMiembros);
-		//Collections.sort(C, compFrecDia.reversed());
-		Collections.sort(C, compFrecFam.reversed());
-		
+		Collections.sort(C, comp);
 		
 		while(!C.isEmpty() && !solucion()) {
 			
@@ -230,10 +232,9 @@ public class Main {
 		return confirmados == inscriptos;
 	}
 	
-	/*
-	private static Map<Integer, List<Familia>> mejora(Map<Integer, Sala> candidatos, int maxSearch) {
-		Map<Integer, Sala> C = candidatos;
-		Map<Integer, Sala> asignadasPreferencia = getAsignadasSegunPrefencia(C);
+	private static Map<Integer, Sala> mejora(int maxSearch) {
+		Map<Integer, Sala> S = reservas;
+		Map<Integer, List<Familia>> asignadasPreferencia = getAsignadasSegunPrefencia(reservas);
 		
 		List<Integer> indexPref = new LinkedList<Integer>(asignadasPreferencia.keySet());
 		Collections.sort(indexPref);
@@ -244,113 +245,103 @@ public class Main {
 			Iterator<Familia> itFam = asignadasPreferencia.get(index).iterator(); //iterador de familias de peores preferencias
 			while(itFam.hasNext()) {
 				Familia f = itFam.next(); // Familia a permutar
-				Integer diaAnt = f.preferenciaEn(index);
-				Integer diaPref = f.diaPreferido();
-				C = permutarFamilias(f, diaAnt, diaPref, C);
+				reubicarFamilia(f);
 			}
 		}
 		
-		return C;
+		return S;
 	}
 	
-	private static Map<Integer, Sala> getAsignadasSegunPrefencia(Map<Integer, Sala> S) {
-		Map<Integer, Sala> result =  new HashMap<Integer, Sala>();
-		Iterator<Entry<Integer, Sala>> it = S.entrySet().iterator();
-		int indicePreferencia = 0;
+	private static Map<Integer, List<Familia>> getAsignadasSegunPrefencia(Map<Integer, Sala> S) {
+		Map<Integer, List<Familia>> result =  new HashMap<Integer, List<Familia>>();
 		
-		while(it.hasNext()) {
-			Entry<Integer, Sala> e = it.next();
-			Iterator<Familia> itFam = e.getValue().iterator();
+		Iterator<Sala> itSalas = S.values().iterator();
+		
+		while(itSalas.hasNext()) {
 			
+			Sala sala = itSalas.next();
+			List<Familia> list;
+			int dia = sala.getDia();
+			Iterator<Familia> itFam = sala.iterator();
 			while(itFam.hasNext()) {
 				Familia f = itFam.next();
-				indicePreferencia = f.indiceDePreferencia(e.getKey());
-				
-				List<Familia> listFam;
-				if(!result.containsKey(indicePreferencia)) {
-					listFam = new Sala();
+				int indicePref = f.indiceDePreferencia(dia);
+				if(result.containsKey(indicePref)) {
+					list = result.get(indicePref);
 				} else {
-					listFam = result.get(indicePreferencia);
+					list = new LinkedList<Familia>();
 				}
-				listFam.add(f);
-				result.put(indicePreferencia, listFam);
+				list.add(f);
+				result.put(indicePref, list);
 			}
+			
 		}
 		
 		return result;
 	}
 	
-	private static Map<Integer, List<Familia>> permutarFamilias(Familia f1, Integer diaAnt, Integer diaPref, Map<Integer, List<Familia>> candidatos) {
-		Map<Integer, List<Familia>> C = candidatos;
-		List<Familia> listDiaPreferido = C.get(diaPref);
-		List<Familia> listCandidatosDiaPref = new LinkedList<>();
-		listCandidatosDiaPref.addAll(listDiaPreferido);
-		List<Familia> listDiaSaliente;
-		List<Familia> listDiaAnterior;
+	private static Familia reubicarFamilia(Familia f1) {
 		
-		int diaPerm = 0;
-		boolean factible = false;
-		boolean espacioSuficiente = false;
+		int diaAntF1 = f1.getDiaReservado();
+		int diaPrefF1 = f1.diaPreferido();
+		
+		Sala f1SalaOut = reservas.get(diaAntF1);
+		Sala f1SalaIn = reservas.get(diaPrefF1);
+		
 		int j = 0;
+		boolean fusibleWhile = false;
 		
-		while(!espacioSuficiente) {
-			Familia f2 = getFamiliaAPermutar(diaPref, listCandidatosDiaPref);
-			int indexPrefF2 = f2.indiceDePreferencia(diaPref);
+		while(!f1SalaIn.factible(f1) && !fusibleWhile) {
 			
-			while(!factible && indexPrefF2 < valoracionesMax) {
-				indexPrefF2++;
-				diaPerm = f2.preferenciaEn(indexPrefF2);
-				if(factible(diaPerm, f2)) {
-					listDiaPreferido.remove(f2);
-					listDiaSaliente = C.get(diaPerm);
-					listDiaSaliente.add(f2);
-					factible = true;
-				}
-			}
+			Familia f2 = getFamiliaAPermutar(f1SalaIn);
 			
-			if(indexPrefF2 == valoracionesMax) {
-				listCandidatosDiaPref.remove(f2);
-			}
+			int diaAntF2 = f2.getDiaReservado();
+			int diaPrefF2 = f2.getNextDia();
 			
-			if(factible(diaPref, f1)) {
-				listDiaPreferido.add(f1);
-				listDiaAnterior = C.get(diaAnt);
-				listDiaAnterior.remove(f1);
-				espacioSuficiente = true;
+			Sala f2SalaIn = reservas.get(diaPrefF2);
+			Sala f2SalaOut = f1SalaIn;
+			
+			if(f2SalaIn.factible(f2)) {
+				f2SalaOut.removeReserva(f2);
+				f2SalaIn.addReserva(f2);
 			}
 			
 			if(j > 500) {
-				espacioSuficiente = true;
+				fusibleWhile = true;
 			}
 			
 			j++;
 		}
-			
-		return C;
+		
+		if(!fusibleWhile) {
+			f1SalaOut.removeReserva(f1);
+			f1SalaIn.addReserva(f1);
+		}
+		
+		return f1;
 	}
 	
-	private static Familia getFamiliaAPermutar(Integer dia, List<Familia> listFam) {
+	private static Familia getFamiliaAPermutar(Sala sala) {
 		Familia f2 = null;
 		double minFrec = 1;
-		int minGF = 100;
-		Iterator<Familia> itFam = listFam.iterator();
+		int minGF = 3;
 		
+		Iterator<Familia> itFam = sala.iterator();
 		while(itFam.hasNext()) {
 			Familia f = itFam.next();
 			double frecDia = f.frecuenciaAcum(frecuenciaDias);
 			int GF = f.miembros();
 			if(GF < minGF) {
 				minGF = GF;
-				f2 = f;
 				if(frecDia < minFrec) {
 					minFrec = frecDia;
+					f2 = f;
 				}
 			}
 		}
 		
 		return f2;
 	}
-	*/
 	
 	private static void calcularBonoTotal(Map<Integer, Sala> S) {
 		costoTotal = 0;
