@@ -16,13 +16,15 @@ public class Main {
 			System.out.println(familia);
 
 
-
+		/*
+		 * Dataset 2
+		 *
 		CSVReader reader2 = new CSVReader("./data/familias-2.csv");
 		
 		ArrayList<Familia> familias2 = reader2.read();
 		
 		for (Familia familia: familias2)
 			System.out.println(familia);
-		
+		*/
 	}
 }

@@ -1,18 +1,44 @@
 package ProgramacionIII.tp5;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /* Una familia, con su cantidad de dias, y una arreglo con el top de 3 dias preferidos */
-public class Familia implements Comparable<Familia> {
+public class Familia implements Comparable<Familia>, Iterable<Integer> {
 
 	private int id;
 	private int miembros;
 	private int[] diasPreferidos;
+	private int diaReservado;
 	
 	public Familia(int id, int miembros, int... diasPreferidos) {
 		this.id = id;
 		this.miembros = miembros;
 		this.diasPreferidos = diasPreferidos;
+		this.diaReservado = -1;
+	}
+	
+	public void setDiaReservado(int dia) {
+		if(indiceDePreferencia(dia) != -1) {
+			this.diaReservado = dia;
+		}
+	}
+	
+	public int getDiaReservado() {
+		return this.diaReservado;
+	}
+	
+	public int getNextDia() {
+		int nextDia = -1;
+		int indexReserva = indiceDePreferencia(diaReservado);
+		indexReserva++;
+		if(preferenciaEn(indexReserva) != -1) {
+			nextDia = preferenciaEn(indexReserva);
+		}
+		
+		return nextDia;
 	}
 
 	/* Id de la familia */
@@ -54,6 +80,17 @@ public class Familia implements Comparable<Familia> {
 	@Override
 	public int compareTo(Familia o) {
 		return Integer.compare(this.miembros, o.miembros);
+	}
+	
+	@Override
+	public Iterator<Integer> iterator() {
+		List<Integer> preferencias = new LinkedList<Integer>();
+		
+		for (int i = 0; i < diasPreferidos.length; i++) {
+			preferencias.add(diasPreferidos[i]);
+		}
+		
+		return preferencias.iterator();
 	}
 
 }
