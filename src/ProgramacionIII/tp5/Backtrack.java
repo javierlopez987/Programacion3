@@ -8,6 +8,7 @@ public class Backtrack {
 	private List<Familia> familias;
 	private int nrofamilias;
 	private Long contador;
+	private int minBono;
 	
 	public Backtrack (List<Familia> familias) {
 		this.familias = familias;
@@ -16,6 +17,7 @@ public class Backtrack {
 	}
 	
 	public void start(Solucion propuesta) {
+		this.minBono = propuesta.getCosto();
 		backtracking(0, propuesta, 0);
 	}
 	
@@ -27,9 +29,10 @@ public class Backtrack {
 			if(solucion(salas)) {
 				if(bono < salas.getCosto()) {
 					salas.setCosto(bono);
+					minBono = bono;
 					System.out.println(salas);
-					System.out.println(salas.getCosto());
-					System.out.println(contador);
+					System.out.println("Costo de bono: " + salas.getCosto());
+					System.out.println("Estado visitado N°: " + contador);
 				}
 			}
 		} else {
@@ -47,8 +50,10 @@ public class Backtrack {
 					sala.addReserva(f);
 					bono += salas.calcularBono(f.indiceDePreferencia(dia), f.miembros());
 					
-					//Llama a backtracking
-					backtracking(indiceFamActual, salas, bono);
+					if(bono < minBono) {
+						//Llama a backtracking
+						backtracking(indiceFamActual, salas, bono);
+					}
 					
 					//Deshace cambios
 					sala.removeReserva(f);
