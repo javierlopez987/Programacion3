@@ -1,11 +1,8 @@
 package ProgramacionIII.tp5;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class Main {
-	private static int nrofamilias;
 	
 	public static void main(String... args) {
 		
@@ -16,19 +13,21 @@ public class Main {
 		int cantDiasMax = 10;
 		int capacidadMax = 30;
 		int valorBono = 5;
+		
+		/*
+		 * Dataset 1
+		 */
 		CSVReader reader = new CSVReader("./data/familias-1.csv");
 		ArrayList<Familia> familias = reader.read();
-		nrofamilias = familias.size();
 
+		Backtrack back = new Backtrack(familias);
+		Solucion propuesta1 = new Solucion(cantDiasMax, capacidadMax, valorBono);
+		back.start(propuesta1);
 		
-		Solucion propuesta1 = new Solucion(familias, cantDiasMax, capacidadMax, valorBono);
-		propuesta1.getSolucion();
-
 		/*
 		 * Dataset 2
 		 *
 		CSVReader reader2 = new CSVReader("./data/familias-2.csv");
-		
 		ArrayList<Familia> familias2 = reader2.read();
 		
 		for (Familia familia: familias2)

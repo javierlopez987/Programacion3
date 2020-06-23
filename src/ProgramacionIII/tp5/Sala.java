@@ -17,6 +17,11 @@ public class Sala implements Iterable<Familia>{
 		this.reservas = new LinkedList<Familia>();
 	}
 	
+	public void clear() {
+		reservas.clear();
+		this.ocupacion = 0;
+	}
+	
 	public void addReserva(Familia f) {
 		if(factible(f)) {
 			this.reservas.add(f);
@@ -31,6 +36,10 @@ public class Sala implements Iterable<Familia>{
 			f.setDiaReservado(-1);
 			this.reservas.remove(f);
 		}
+	}
+	
+	public int nroReservas() {
+		return reservas.size();
 	}
 	
 	public boolean factible(Familia f) {
