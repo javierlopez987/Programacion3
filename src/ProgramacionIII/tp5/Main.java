@@ -22,6 +22,7 @@ public class Main {
 
 		
 		Solucion propuesta1 = new Solucion(familias, cantDiasMax, capacidadMax, valorBono);
+		propuesta1.getSolucion();
 
 		/*
 		 * Dataset 2
@@ -34,35 +35,5 @@ public class Main {
 			System.out.println(familia);
 		*/
 	}
-	
-
-	private static List<Integer> backtracking(Familia famActual, int[] solPref, List<Familia> familiasConsultadas, List<Sala> salas) {
-		
-		if(estadoFinal(familiasConsultadas)) {
-			if(solucion(salas)) {
-				System.out.println(salas);
-			}
-		} else {
-			
-		}
-	}
-
-
-	private static boolean solucion(List<Sala> salas) {
-		int reservas = 0;
-		Iterator<Sala> it = salas.iterator();
-		
-		while(it.hasNext()) {
-			Sala s = it.next();
-			reservas += s.getFamilias();
-		}
-		return reservas == nrofamilias;
-	}
-
-
-	private static boolean estadoFinal(List<Familia> familiasConsultadas) {
-		return familiasConsultadas.size() == nrofamilias;
-	}
-	
 	
 }

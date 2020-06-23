@@ -28,7 +28,6 @@ public class Solucion {
 	
 	public List<Sala> getSolucion() {
 		List<Sala> propuesta = new ArrayList<Sala>();
-		
 		resolverConBacktracking();
 		propuesta.addAll(salas);
 		
@@ -37,9 +36,7 @@ public class Solucion {
 	
 	private void resolverConBacktracking() {
 		Backtrack back = new Backtrack(familias, salas, this);
-		
-		salas = back.start();
-		
+		back.start();
 	}
 	
 	public int calcularBono(int indicePref, int grupoFamiliar) {
