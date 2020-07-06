@@ -19,6 +19,7 @@ public class Backtrack {
 	public void start(Solucion propuesta) {
 		this.minBono = propuesta.getCosto();
 		backtracking(0, propuesta, 0);
+		System.out.println("Total de estados visitados: " + contador);
 	}
 	
 	private void backtracking(int indiceFamActual, Solucion salas, int bono) {
@@ -27,13 +28,11 @@ public class Backtrack {
 		
 		if(estadoFinal(indiceFamActual)) {
 			if(solucion(salas)) {
-				if(bono < salas.getCosto()) {
-					salas.setCosto(bono);
-					minBono = bono;
-					System.out.println(salas);
-					System.out.println("Costo de bono: " + salas.getCosto());
-					System.out.println("Estado visitado N°: " + contador);
-				}
+				salas.setCosto(bono);
+				minBono = bono;
+				System.out.println(salas);
+				System.out.println("Costo de bono: " + salas.getCosto());
+				System.out.println("Estado visitado N°: " + contador);
 			}
 		} else {
 			Familia f = familias.get(indiceFamActual);
